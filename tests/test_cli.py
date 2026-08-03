@@ -104,14 +104,32 @@ def test_theme_set_and_invalid(tmp_path, cfg):
     assert exc.value.code == 2
 
 
-def test_status_json_shape(tmp_path, cfg, capsys):
+def test_status_json_golden_schema(tmp_path, cfg, capsys):
+    """Golden test: the --json payload keeps its exact documented shape."""
     folder = tmp_path / "notes"
     folder.mkdir()
-    repos.add_repo(config.load(), folder)
+    repo = repos.add_repo(config.load(), folder, time="18:00")
     assert main(["status", "--json"]) == 0
     payload = json.loads(capsys.readouterr().out)
+
+    # top-level keys, stable and complete
+    assert set(payload) == {"version", "theme", "autosync", "notifications", "stats", "repos"}
+    assert isinstance(payload["version"], int)
+    assert payload["theme"] in {"neon", "crt", "gameboy", "watermelon", "paper"}
+    assert isinstance(payload["autosync"], bool)
+    assert isinstance(payload["notifications"], bool)
+
+    # stats schema
+    assert set(payload["stats"]) == {"total_pushes", "last_run", "last_error"}
+
+    # repo schema: id/path/remote/branch/schedules, each schedule time+enabled
+    assert set(payload["repos"][0]) == {"id", "path", "remote", "branch", "schedules"}
+    assert payload["repos"][0]["id"] == repo["id"]
     assert payload["repos"][0]["path"] == str(folder.resolve())
-    assert set(payload) >= {"version", "theme", "stats", "repos"}
+    assert payload["repos"][0]["branch"] == "main"
+    assert set(payload["repos"][0]["schedules"][0]) == {"time", "enabled"}
+    assert payload["repos"][0]["schedules"][0] == {"time": "18:00", "enabled": True}
+    assert json.dumps(payload)  # fully JSON-serializable (no Path/non-native types)
 
 
 def test_backup_all_pushes(tmp_path, cfg):

@@ -101,3 +101,45 @@ def test_sync_all_aggregates(tmp_path, cfg):
     result = sync.sync_all(cfg)
     assert result["ok"] is True
     assert len(result["results"]) == 1
+
+
+def test_sync_skips_without_remote(tmp_path, cfg):
+    """A repo with no git remote must be skipped, not crash."""
+    work, _ = make_pair(tmp_path)
+    repos.add_repo(cfg, work)
+    subprocess.run(["git", "-C", str(work), "remote", "remove", "origin"], check=True)
+
+    result = sync.sync_repo(cfg, repos.find_repo(cfg, work))
+    assert result["ok"] is False
+    assert "no remote" in result["message"]
+
+
+def test_pull_all_aggregates(tmp_path, cfg):
+    work, _ = make_pair(tmp_path)
+    repos.add_repo(cfg, work)
+    result = sync.pull_all(cfg)
+    assert result["ok"] is True
+    assert len(result["results"]) == 1
+
+
+def test_pull_repo_updates_working_tree(tmp_path, cfg):
+    """A change pushed from another device appears locally after pull."""
+
+    def run(*args, cwd=None):
+        return subprocess.run(args, cwd=cwd, check=True, capture_output=True, text=True)
+
+    work, bare = make_pair(tmp_path)
+    repos.add_repo(cfg, work)
+
+    other = tmp_path / "other"
+    run("git", "clone", str(bare), str(other))
+    run("git", "config", "user.name", "Other", cwd=other)
+    run("git", "config", "user.email", "o@o.com", cwd=other)
+    (other / "from-other.md").write_text("hi\n")
+    run("git", "add", "-A", cwd=other)
+    run("git", "commit", "-m", "remote edit", cwd=other)
+    run("git", "push", "origin", "main", cwd=other)
+
+    result = sync.pull_repo(cfg, repos.find_repo(cfg, work))
+    assert result["ok"] is True
+    assert (work / "from-other.md").exists()

@@ -159,11 +159,32 @@ tidy status
 
 This repo ships a [devcontainer](.devcontainer/devcontainer.json) — open it in **GitHub Codespaces** or VS Code for a secure, configured development environment with everything preinstalled.
 
+### Docs
+
+| Doc | What's inside |
+|---|---|
+| [`docs/CLI.md`](docs/CLI.md) | full `tidy` command reference |
+| [`docs/MCP.md`](docs/MCP.md) | MCP setup for Claude Desktop / Cursor / Cline |
+| [`docs/MANUAL_TEST.md`](docs/MANUAL_TEST.md) | manual QA checklist (theme, tray, catch-up, conflict…) |
+| [`CHANGELOG.md`](CHANGELOG.md) | release history |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | setup, style, testing, releasing |
+
+### Testing
+
+```bash
+pytest            # 105 tests — unit + integration against real git pairs
+ruff check .      # lint
+ruff format .     # format
+```
+
 ### Structure
 ```
 Tidy/
 ├── src/tidy/          # the engine + CLI + GUI + MCP
 ├── designs/           # 5 pixel theme mockups
+├── packaging/         # systemd units, AppImage build, PyInstaller spec
+├── docs/              # CLI/MCP/manual-test reference
+├── skills/            # pi skill (installed to ~/.agents/skills/tidy)
 ├── install.sh         # one-command setup (laptop / --server)
 ├── pyproject.toml     # package metadata (tidy, tidy-gui, tidy-mcp)
 └── .devcontainer/     # Codespaces dev environment

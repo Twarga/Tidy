@@ -235,13 +235,13 @@ Config  ~/.config/tidy/config.json
 
 | ID | Task | Details | Files |
 |---|---|---|---|
-| 8.1 | Unit tests | config (load/save/migrate), schedules (add/dup/remove), logger | `tests/test_config.py` etc. |
-| 8.2 | Integration tests | fake git repo fixture → sync commits/pushes/skips | `tests/test_sync.py` |
-| 8.3 | CLI golden tests | `tidy status --json` schema | `tests/test_cli.py` |
-| 8.4 | Manual test sheet | checklist: theme switch, tray panel, sleep catch-up, conflict | `docs/MANUAL_TEST.md` |
-| 8.5 | Docs | README polish, CONTRIBUTING.md, docs/CLI.md, docs/MCP.md | `docs/` |
-| 8.6 | Ruff + format | `ruff check` clean, `ruff format` | — |
-| 8.7 | Final demo | run `tidy tui`, `tidy-gui`, `tidy-mcp` with real Twarga-System repo | — |
+| ✅ 8.1 | Unit tests | config (load/save/migrate), schedules (add/dup/remove), logger | `tests/test_config.py` etc. |
+| ✅ 8.2 | Integration tests | fake git repo fixture → sync commits/pushes/skips | `tests/test_sync.py` |
+| ✅ 8.3 | CLI golden tests | `tidy status --json` schema | `tests/test_cli.py` |
+| ✅ 8.4 | Manual test sheet | checklist: theme switch, tray panel, sleep catch-up, conflict | `docs/MANUAL_TEST.md` |
+| ✅ 8.5 | Docs | README polish, CONTRIBUTING.md, docs/CLI.md, docs/MCP.md | `docs/` |
+| ✅ 8.6 | Ruff + format | `ruff check` clean, `ruff format` | — |
+| ✅ 8.7 | Final demo | run `tidy tui`, `tidy-gui`, `tidy-mcp` with real Twarga-System repo | — |
 
 **Phase 8 exit criteria:** all tests green, ruff clean, release tag pushed.
 
