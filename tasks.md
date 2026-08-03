@@ -267,10 +267,15 @@ Phase 0 → Phase 1 → Phase 2 ─┬→ Phase 3 (needs 1,2)
 | Running twice (GUI + daemon) | lock file; GUI talks to running daemon if present |
 
 ## Definition of Done (v0.1.0)
-- [ ] All phases above complete with exit criteria met
-- [ ] 5 themes live in GUI
-- [ ] `tidy status / backup / add / schedule / serve / tui` working headless
-- [ ] MCP tools usable from Claude Desktop
-- [ ] `install.sh` works (desktop + VPS) · AppImage launches
-- [ ] 24/7 systemd service with catch-up
-- [ ] Tests + ruff clean · release v0.1.0 on GitHub
+- [x] All phases above complete with exit criteria met
+- [x] 5 themes live in GUI
+- [x] `tidy status / backup / add / schedule / serve / tui` working headless
+- [x] MCP tools usable from Claude Desktop
+- [x] `install.sh` works (desktop + VPS) · AppImage launches
+- [x] 24/7 systemd service with catch-up
+- [x] Tests + ruff clean · release v0.1.0 on GitHub
+
+---
+
+> **Status: SHIPPED ✅** — v0.1.0 released; user service installed and enabled
+> on this machine (`systemctl --user status tidy` → active). Vault syncs daily at 12:30.
