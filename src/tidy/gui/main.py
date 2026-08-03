@@ -64,9 +64,9 @@ def main() -> None:
         "Tidy",
         url=_asset_url(),
         js_api=api,
-        width=880,
-        height=780,
-        min_size=(620, 560),
+        width=1120,
+        height=720,
+        min_size=(940, 620),
     )
     window.events.closing += on_closing
     tray = TidyTray(
