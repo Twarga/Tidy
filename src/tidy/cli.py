@@ -184,7 +184,9 @@ def cmd_serve(_: argparse.Namespace) -> int:
 
 
 def cmd_tui(_: argparse.Namespace) -> int:
-    ui.print_warn("`tidy tui` arrives in Phase 3 (full-screen terminal UI). Coming soon!")
+    from tidy.tui.app import TidyApp
+
+    TidyApp().run()
     return 0
 
 

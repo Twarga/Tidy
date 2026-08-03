@@ -43,9 +43,9 @@ Config  ~/.config/tidy/config.json
 |---|---|---|---|---|
 | 0.1 | ✅ Package skeleton | Confirm `src/tidy/` layout, `pyproject.toml` entry points (`tidy`, `tidy-gui`, `tidy-mcp`) | `src/tidy/*` | ✅ |
 | 0.2 | ✅ Repo + GitHub | Repo created, README, LICENSE, .gitignore, devcontainer, tags | `./*` | ✅ |
-| 0.3 | Dev environment | `python -m venv .venv` in `~/Documents/Tidy`; install `[dev]` extras | `.venv/` | ⬜ |
-| 0.4 | Version constant | `__version__` in `src/tidy/__init__.py`, imported everywhere (never hardcoded) | `src/tidy/__init__.py` | ⬜ |
-| 0.5 | Exit early on git absence | Helper that raises clear error if `git` not on PATH | `src/tidy/git.py` | ⬜ |
+| 0.3 | Dev environment | `python -m venv .venv` in `~/Documents/Tidy`; install `[dev]` extras | `.venv/` | ✅ |
+| 0.4 | Version constant | `__version__` in `src/tidy/__init__.py`, imported everywhere (never hardcoded) | `src/tidy/__init__.py` | ✅ |
+| 0.5 | Exit early on git absence | Helper that raises clear error if `git` not on PATH | `src/tidy/git.py` | ✅ |
 
 **Phase 0 exit criteria:** `pip install -e .` works; `tidy --version` prints `0.1.0`.
 

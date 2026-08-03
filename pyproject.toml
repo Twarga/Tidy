@@ -18,6 +18,7 @@ classifiers = [
   "Topic :: System :: Archiving :: Backup",
   "Topic :: Software Development :: Version Control :: Git",
 ]
+dependencies = ["rich>=13"]
 
 [project.urls]
 Homepage = "https://github.com/Twarga/Tidy"
@@ -26,9 +27,9 @@ Repository = "https://github.com/Twarga/Tidy"
 [project.optional-dependencies]
 gui = ["pywebview>=5", "pillow"]
 mcp = ["fastmcp>=2"]
-tui = ["rich>=13", "textual>=0.80"]
+tui = ["textual>=0.80"]
 scheduler = ["apscheduler>=3.10"]
-dev = ["pytest>=8", "ruff>=0.6", "build>=1.2"]
+dev = ["pytest>=8", "pytest-asyncio>=0.24", "ruff>=0.6", "build>=1.2"]
 
 [project.scripts]
 tidy = "tidy.cli:main"
@@ -37,6 +38,10 @@ tidy-mcp = "tidy.mcp:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
 
 [tool.ruff]
 line-length = 100
