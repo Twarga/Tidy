@@ -137,6 +137,13 @@ Design mockups live in [`designs/`](designs/).
 ```bash
 git clone https://github.com/Twarga/Tidy
 cd Tidy
+./dev.sh            # pretty launcher — GUI / TUI / daemon / shell
+./dev.sh gui        # straight to the desktop GUI
+```
+
+`dev.sh` bootstraps the venv (with `--system-site-packages` so PyGObject/webkit work for the GUI), installs the editable package + extras with a spinner, detects whether a display is available, and drops you into a menu:
+
+```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 tidy status

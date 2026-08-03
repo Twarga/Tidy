@@ -78,3 +78,7 @@ def main() -> None:
     signal.signal(signal.SIGINT, on_signal)
     webview.start()
     tray.stop()
+
+
+if __name__ == "__main__":
+    main()
