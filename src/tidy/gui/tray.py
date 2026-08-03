@@ -31,6 +31,7 @@ class TidyTray:
         if not os.environ.get("DISPLAY") and not os.environ.get("WAYLAND_DISPLAY"):
             log_warn("no display available — tray disabled")
             return False
+        self._prefer_xorg_backend()  # must run before ``import pystray``
         try:
             import pystray
             from PIL import Image, ImageDraw
@@ -48,6 +49,26 @@ class TidyTray:
         self._thread = threading.Thread(target=icon.run, daemon=True)
         self._thread.start()
         return True
+
+    @staticmethod
+    def _prefer_xorg_backend() -> None:
+        """Use pystray's pure-X11 backend when possible.
+
+        The default Linux backends (appindicator/gtk) start their own GTK
+        main loop, which collides with pywebview's GTK loop and crashes the
+        GUI with a ``GLib-GIO-CRITICAL``. The xorg backend is plain Xlib and
+        needs no GTK loop, so it is safe to run alongside the webview window.
+        """
+        if os.environ.get("PYSTRAY_BACKEND"):
+            return  # respect an explicit user override
+        try:
+            import Xlib.display
+
+            Xlib.display.Display()  # verify an X connection actually exists
+        except Exception as exc:  # noqa: BLE001 - tray is optional
+            log_warn(f"xorg tray backend unavailable ({exc}); using default")
+            return
+        os.environ["PYSTRAY_BACKEND"] = "xorg"
 
     def stop(self) -> None:
         if self._icon is not None:

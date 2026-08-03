@@ -153,6 +153,48 @@ def test_tray_disabled_headless():
             os.environ["WAYLAND_DISPLAY"] = old_wayland
 
 
+def test_tray_prefers_xorg_backend(monkeypatch):
+    """pystray's GTK/appindicator backends crash the GUI (GLib-GIO-CRITICAL), so
+    the pure-X11 xorg backend must be preferred whenever an X connection works."""
+    import os
+
+    from tidy.gui.tray import TidyTray
+
+    os.environ.pop("PYSTRAY_BACKEND", None)
+    monkeypatch.setattr("Xlib.display.Display", lambda: object())
+    TidyTray._prefer_xorg_backend()
+    assert os.environ.get("PYSTRAY_BACKEND") == "xorg"
+
+
+def test_tray_xorg_falls_back_without_x(monkeypatch):
+    import os
+
+    from tidy.gui.tray import TidyTray
+
+    os.environ.pop("PYSTRAY_BACKEND", None)
+
+    def no_display():
+        raise OSError("cannot open display")
+
+    monkeypatch.setattr("Xlib.display.Display", no_display)
+    TidyTray._prefer_xorg_backend()
+    assert "PYSTRAY_BACKEND" not in os.environ
+
+
+def test_tray_respects_user_backend_override(monkeypatch):
+    import os
+
+    from tidy.gui.tray import TidyTray
+
+    os.environ["PYSTRAY_BACKEND"] = "appindicator"
+    try:
+        monkeypatch.setattr("Xlib.display.Display", lambda: object())
+        TidyTray._prefer_xorg_backend()
+        assert os.environ["PYSTRAY_BACKEND"] == "appindicator"  # untouched
+    finally:
+        os.environ.pop("PYSTRAY_BACKEND", None)
+
+
 # ------------------------------------------------------------------- assets
 
 
