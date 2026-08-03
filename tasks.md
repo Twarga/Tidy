@@ -167,31 +167,31 @@ Config  ~/.config/tidy/config.json
 ### 5.1 pywebview shell
 | ID | Task | Details | Files |
 |---|---|---|---|
-| 5.1.1 | Window | `webview.create_window("Tidy", url=local assets, js_api=Api())` | `src/tidy/gui/main.py` |
-| 5.1.2 | JS ⇄ Python bridge | `Api` class methods callable from JS (`backup_all`, `list_repos`, …) | `src/tidy/gui/api.py` |
-| 5.1.3 | Assets | `web/` folder: index.html + theme CSS + JS, fonts bundled locally (offline) | `src/tidy/gui/web/` |
-| 5.1.4 | Ports/conflicts | run on fixed local port if `server=True`, else file:// | `src/tidy/gui/main.py` |
+| ✅ 5.1.1 | Window | `webview.create_window("Tidy", url=local assets, js_api=Api())` | `src/tidy/gui/main.py` |
+| ✅ 5.1.2 | JS ⇄ Python bridge | `Api` class methods callable from JS (`backup_all`, `list_repos`, …) | `src/tidy/gui/api.py` |
+| ✅ 5.1.3 | Assets | `web/` folder: index.html + theme CSS + JS, fonts bundled locally (offline) | `src/tidy/gui/web/` |
+| ✅ 5.1.4 | Ports/conflicts | run on fixed local port if `server=True`, else file:// | `src/tidy/gui/main.py` |
 
 ### 5.2 UI from mockups
 | ID | Task | Details | Files |
 |---|---|---|---|
-| 5.2.1 | Base layout | header, status banner, stats, repos cards, actions, log (from `designs/mockup.html`) | `src/tidy/gui/web/index.html` |
-| 5.2.2 | Repo card | path, remote, schedule time chips (✕ remove, ＋ ADD TIME), ▶ PUSH NOW, status dot | `src/tidy/gui/web/index.html` |
-| 5.2.3 | Add repo | native folder dialog (`tkinter`/`zenity` fallback → or webkit file input) | `src/tidy/gui/api.py` |
-| 5.2.4 | Log panel | live entries pushed from Python via JS callback | `src/tidy/gui/web/index.html` |
-| 5.2.5 | Stats strip | last backup, repo count, total pushes | `src/tidy/gui/web/index.html` |
-| 5.2.6 | Tray icon | `pystray` + `Pillow` icon; click = open window, right-click = menu | `src/tidy/gui/tray.py` |
-| 5.2.7 | **Tray mini-panel** | right-click popup: status · BACKUP ALL · PULL ALL · per-repo ▶ · theme dots · OPEN WINDOW · QUIT | `src/tidy/gui/tray.py` |
-| 5.2.8 | Notifications | desktop notify on success/failure (config-gated) | `src/tidy/notify.py` |
+| ✅ 5.2.1 | Base layout | header, status banner, stats, repos cards, actions, log (from `designs/mockup.html`) | `src/tidy/gui/web/index.html` |
+| ✅ 5.2.2 | Repo card | path, remote, schedule time chips (✕ remove, ＋ ADD TIME), ▶ PUSH NOW, status dot | `src/tidy/gui/web/index.html` |
+| ✅ 5.2.3 | Add repo | native folder dialog (`tkinter`/`zenity` fallback → or webkit file input) | `src/tidy/gui/api.py` |
+| ✅ 5.2.4 | Log panel | live entries pushed from Python via JS callback | `src/tidy/gui/web/index.html` |
+| ✅ 5.2.5 | Stats strip | last backup, repo count, total pushes | `src/tidy/gui/web/index.html` |
+| ✅ 5.2.6 | Tray icon | `pystray` + `Pillow` icon; click = open window, right-click = menu | `src/tidy/gui/tray.py` |
+| ✅ 5.2.7 | **Tray mini-panel** | right-click popup: status · BACKUP ALL · PULL ALL · per-repo ▶ · theme dots · OPEN WINDOW · QUIT | `src/tidy/gui/tray.py` |
+| ✅ 5.2.8 | Notifications | desktop notify on success/failure (config-gated) | `src/tidy/notify.py` |
 
 ### 5.3 Themes
 | ID | Task | Details | Files |
 |---|---|---|---|
-| 5.3.1 | Theme registry | `THEMES = {neon, crt, gameboy, watermelon, paper}` with CSS vars | `src/tidy/gui/themes.py` |
-| 5.3.2 | Live switcher | JS sets `data-theme` on `<html>`; persisted via `set_setting("theme", …)` | `src/tidy/gui/web/index.html` |
-| 5.3.3 | Fonts offline | bundle VT323 + Press Start 2P as `.woff2` in `web/assets/fonts/` | `src/tidy/gui/web/assets/fonts/` |
+| ✅ 5.3.1 | Theme registry | `THEMES = {neon, crt, gameboy, watermelon, paper}` with CSS vars | `src/tidy/gui/themes.py` |
+| ✅ 5.3.2 | Live switcher | JS sets `data-theme` on `<html>`; persisted via `set_setting("theme", …)` | `src/tidy/gui/web/index.html` |
+| ✅ 5.3.3 | Fonts offline | bundle VT323 + Press Start 2P as `.woff2` in `web/assets/fonts/` | `src/tidy/gui/web/assets/fonts/` |
 
-**Phase 5 exit criteria:** GUI opens with chosen default theme; add repo via file dialog; PUSH NOW works; tray right-click mini-panel controls backup + theme; close window → app stays in tray.
+**Phase 5 exit criteria:** GUI opens with chosen default theme; add repo via file dialog; PUSH NOW works; tray right-click mini-panel controls backup + theme; closing window hides to tray (app alive) — Quit/SIGTERM do a real shutdown.
 
 ---
 
