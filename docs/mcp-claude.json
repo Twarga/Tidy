@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "tidy": {
+      "command": "/home/twarga/.local/bin/tidy-mcp",
+      "args": []
+    }
+  }
+}

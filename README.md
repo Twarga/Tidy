@@ -114,6 +114,14 @@ Register it with Claude Desktop:
 }
 ```
 
+Run the server with `tidy-mcp` (or `python -m tidy.mcp`). A ready sample is in
+[`docs/mcp-claude.json`](docs/mcp-claude.json); full setup (Claude Desktop, Cursor,
+Cline, pi) is in [`docs/MCP.md`](docs/MCP.md).
+
+For **pi** the same power is exposed as a `tidy` **skill** (installed at
+`~/.agents/skills/tidy/`, versioned in [`skills/tidy/SKILL.md`](skills/tidy/SKILL.md))
+that drives the `tidy` CLI directly.
+
 ---
 
 ## 🎨 Themes

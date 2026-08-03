@@ -199,19 +199,19 @@ Config  ~/.config/tidy/config.json
 
 | ID | Task | Details | Files |
 |---|---|---|---|
-| 6.1 | MCP server | FastMCP app exposing tools below; stdio transport | `src/tidy/mcp.py` |
-| 6.2 | `list_repos` | → repos + schedules + status | `src/tidy/mcp.py` |
-| 6.3 | `add_repo(path, remote?)` | → added repo | `src/tidy/mcp.py` |
-| 6.4 | `remove_repo(path)` | → removed | `src/tidy/mcp.py` |
-| 6.5 | `add_schedule(repo, time)` | → updated schedule list | `src/tidy/mcp.py` |
-| 6.6 | `remove_schedule(repo, time)` | → updated schedule list | `src/tidy/mcp.py` |
-| 6.7 | `backup_now(repo?)` | → run sync, return result (all if omitted) | `src/tidy/mcp.py` |
-| 6.8 | `pull_now(repo?)` | → pull result | `src/tidy/mcp.py` |
-| 6.9 | `get_status()` | → summary | `src/tidy/mcp.py` |
-| 6.10 | `get_logs(n=20)` | → recent entries | `src/tidy/mcp.py` |
-| 6.11 | `set_setting(key, value)` | theme/autosync/notifications | `src/tidy/mcp.py` |
-| 6.12 | MCP config sample | `docs/mcp-claude.json` for Claude Desktop + Cursor instructions | `docs/` |
-| 6.13 | pi skill | SKILL.md that tells pi to use `tidy` CLI commands | `~/.agents/skills/tidy/` |
+| ✅ 6.1 | MCP server | FastMCP app exposing tools below; stdio transport | `src/tidy/mcp.py` |
+| ✅ 6.2 | `list_repos` | → repos + schedules + status | `src/tidy/mcp.py` |
+| ✅ 6.3 | `add_repo(path, remote?)` | → added repo | `src/tidy/mcp.py` |
+| ✅ 6.4 | `remove_repo(path)` | → removed | `src/tidy/mcp.py` |
+| ✅ 6.5 | `add_schedule(repo, time)` | → updated schedule list | `src/tidy/mcp.py` |
+| ✅ 6.6 | `remove_schedule(repo, time)` | → updated schedule list | `src/tidy/mcp.py` |
+| ✅ 6.7 | `backup_now(repo?)` | → run sync, return result (all if omitted) | `src/tidy/mcp.py` |
+| ✅ 6.8 | `pull_now(repo?)` | → pull result | `src/tidy/mcp.py` |
+| ✅ 6.9 | `get_status()` | → summary | `src/tidy/mcp.py` |
+| ✅ 6.10 | `get_logs(n=20)` | → recent entries | `src/tidy/mcp.py` |
+| ✅ 6.11 | `set_setting(key, value)` | theme/autosync/notifications | `src/tidy/mcp.py` |
+| ✅ 6.12 | MCP config sample | `docs/mcp-claude.json` for Claude Desktop + Cursor instructions | `docs/` |
+| ✅ 6.13 | pi skill | SKILL.md that tells pi to use `tidy` CLI commands | `~/.agents/skills/tidy/` |
 
 **Phase 6 exit criteria:** Claude Desktop can add a schedule and push; `pi` can run `tidy backup all` via the skill.
 
