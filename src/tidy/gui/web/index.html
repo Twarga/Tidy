@@ -5,209 +5,349 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TIDY</title>
 <style>
-  @font-face {
-    font-family: 'VT323'; font-style: normal; font-weight: 400; font-display: swap;
-    src: url('fonts/vt323.woff2') format('woff2');
-  }
-  @font-face {
-    font-family: 'Press Start 2P'; font-style: normal; font-weight: 400; font-display: swap;
-    src: url('fonts/pressstart2p.woff2') format('woff2');
-  }
+  @font-face { font-family:'VT323'; font-style:normal; font-weight:400; src:url('fonts/vt323.woff2') format('woff2'); }
+  @font-face { font-family:'Press Start 2P'; font-style:normal; font-weight:400; src:url('fonts/pressstart2p.woff2') format('woff2'); }
 
-  /* ===== theme variables (same 5 palettes as themes.py) ===== */
-  :root[data-theme="neon"]      { --bg:#150a2e; --panel:#1d1244; --panel2:#2a1a5e; --border:#21f3d9; --accent:#ff4fd8; --accent2:#21d0ff; --text:#f6f2ff; --muted:#b9aee6; --ok:#21f371; --warn:#ffc93c; --bad:#ff5c7a; }
-  :root[data-theme="crt"]       { --bg:#04070a; --panel:#0a1216; --panel2:#0f1e1e; --border:#2bffb0; --accent:#7dff8a; --accent2:#e0ff5e; --text:#c6ffd9; --muted:#5fbf8f; --ok:#3dff7a; --warn:#ffd166; --bad:#ff6b6b; }
-  :root[data-theme="gameboy"]   { --bg:#aebcba; --panel:#cfd8d5; --panel2:#e3ebe8; --border:#0f380f; --accent:#9bbc0f; --accent2:#5d7a1f; --text:#1f3a12; --muted:#57723f; --ok:#0f380f; --warn:#9bbc0f; --bad:#7a1212; }
-  :root[data-theme="watermelon"]{ --bg:#ff3d5a; --panel:#ffe9f0; --panel2:#fff4f8; --border:#ff2d55; --accent:#2b8c3e; --accent2:#1e6d31; --text:#3a1020; --muted:#a04a62; --ok:#2fb25a; --warn:#ff9f1c; --bad:#ff2d55; }
-  :root[data-theme="paper"]     { --bg:#efe7d4; --panel:#f6f1e3; --panel2:#fffdf5; --border:#5a4a36; --accent:#c1440e; --accent2:#47597e; --text:#3a342a; --muted:#8a7f6b; --ok:#4a7b3a; --warn:#c98a2b; --bad:#c1440e; }
+  :root { --ease:cubic-bezier(.22,1,.36,1); }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
+  /* ================= 5 theme palettes (mirror themes.py) ================= */
+  :root[data-theme="neon"]       { --bg:#150a2e; --panel:#201449; --panel2:#2a1a5e; --border:#21f3d9; --accent:#ff4fd8; --accent2:#21d0ff; --text:#f6f2ff; --muted:#a99bdd; --ok:#2ff27e; --warn:#ffd166; --bad:#ff5c7a; }
+  :root[data-theme="crt"]        { --bg:#04070a; --panel:#0a1418; --panel2:#0f1f24; --border:#2bffb0; --accent:#7dff8a; --accent2:#e0ff5e; --text:#dcffe8; --muted:#6fce9a; --ok:#3dff7a; --warn:#ffd166; --bad:#ff6b6b; }
+  :root[data-theme="gameboy"]    { --bg:#97a79e; --panel:#b9ccc2; --panel2:#d7e5dd; --border:#0f380f; --accent:#0f380f; --accent2:#2a6d31; --text:#122d09; --muted:#3d5c30; --ok:#0f380f; --warn:#6a7a10; --bad:#8b1a1a; }
+  :root[data-theme="watermelon"] { --bg:#3a1520; --panel:#7a2031; --panel2:#ff7e95; --border:#ffd9e0; --accent:#2fb25a; --accent2:#ffe9f0; --text:#fdeef2; --muted:#ffc2cd; --ok:#53e07f; --warn:#ffd166; --bad:#ffffff; }
+  :root[data-theme="paper"]      { --bg:#cfc2a6; --panel:#e8dfca; --panel2:#fffdf5; --border:#5a4a36; --accent:#c1440e; --accent2:#47597e; --text:#26201a; --muted:#6f5f4a; --ok:#3f7d3a; --warn:#b07b1e; --bad:#c1440e; }
+
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html,body { height:100%; }
   body {
-    font-family: 'VT323', monospace;
-    font-size: 19px;
-    color: var(--text);
-    background: var(--bg);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    font-family:'VT323', monospace; font-size:21px; line-height:1.5;
+    color:var(--text); background:var(--bg);
+    overflow:hidden; user-select:none; -webkit-user-select:none;
   }
+  button,input { font-family:inherit; color:inherit; }
 
-  /* ================= TOP TOOLBAR ================= */
-  .toolbar {
-    display: flex; align-items: center; justify-content: space-between; gap: 14px;
-    padding: 10px 16px;
-    background: var(--panel);
-    border-bottom: 3px solid var(--border);
-    flex: none;
-  }
-  .hud { font-family: 'Press Start 2P', monospace; font-size: 13px; color: var(--accent); letter-spacing: 1px; }
-  .toolbar .right { display: flex; align-items: center; gap: 12px; }
-  .statusline { font-size: 17px; color: var(--muted); }
-  .statusline b.okc { color: var(--ok); }
-  .statusline b.badc { color: var(--bad); }
+  /* ---------------- high-contrast readability mode (default ON) ---------------- */
+  body.hi { --muted:var(--text); }
+  body.hi .muted { opacity:.82; }
 
-  /* theme dots */
-  .dot-btn { width: 22px; height: 22px; border: 2px solid var(--muted); cursor: pointer; }
-  .dot-btn.active { border-color: var(--accent); box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--accent); }
-
-  /* ================= WORKSPACE (sidebar | main / log) ================= */
-  .workspace {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 250px 1fr;
-    grid-template-rows: 1fr auto;
-    min-height: 0;
-  }
-
-  /* ---- left sidebar ---- */
-  .sidebar {
-    grid-row: 1;
-    border-right: 3px solid var(--border);
-    background: var(--panel);
-    overflow-y: auto;
-    padding: 12px;
-    min-height: 0;
-  }
-  .side-head {
-    font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--accent2);
-    margin: 4px 2px 10px; letter-spacing: 1px;
-  }
-  .repo-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 9px 10px; margin-bottom: 6px;
-    border: 2px solid transparent; cursor: pointer;
-    background: var(--panel2);
-  }
-  .repo-item:hover { border-color: var(--border); }
-  .repo-item.active { border-color: var(--accent); background: var(--bg); }
-  .r-dot { width: 12px; height: 12px; flex: none; border: 2px solid var(--panel); }
-  .r-dot.ok { background: var(--ok); }
-  .r-dot.warn { background: var(--warn); }
-  .r-dot.err { background: var(--bad); }
-  .r-name { flex: 1; font-size: 20px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .r-x { color: var(--bad); font-size: 16px; cursor: pointer; padding: 0 2px; }
-  .r-x:hover { background: var(--panel); }
-  .btn-add { width: 100%; margin-top: 10px; }
-
-  /* ---- main detail panel ---- */
-  .main { grid-row: 1; grid-column: 2; padding: 18px 22px; overflow-y: auto; min-height: 0; }
-  .banner {
-    display: flex; gap: 14px; align-items: center;
-    background: var(--panel); border: 2px solid var(--border);
-    padding: 12px 16px; margin-bottom: 18px;
-  }
-  .banner .dot {
-    width: 14px; height: 14px; background: var(--ok);
-    border: 2px solid var(--text); animation: blink 1.4s steps(2) infinite; flex: none;
-  }
-  @keyframes blink { 50% { opacity: .25; } }
-  .bt { font-size: 22px; color: var(--ok); line-height: 1.2; }
-  .bs { font-size: 16px; color: var(--muted); }
-  .repoid { font-family: 'Press Start 2P', monospace; font-size: 14px; color: var(--accent); }
-  .repopath { font-size: 17px; color: var(--muted); margin: 8px 0 4px; word-break: break-all; }
-  .badges { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
-  .badge {
-    font-family: 'Press Start 2P', monospace; font-size: 8px;
-    border: 1px solid var(--accent2); color: var(--accent2); padding: 4px 8px;
-  }
-  .badge.okc { border-color: var(--ok); color: var(--ok); }
-  .badge.badc { border-color: var(--bad); color: var(--bad); }
-
-  .card-head {
-    font-family: 'Press Start 2P', monospace; font-size: 10px; color: var(--accent2);
-    border-bottom: 2px dashed var(--panel2); padding: 2px 2px 8px;
-    margin: 20px 0 12px; letter-spacing: 1px;
-  }
-  .chips { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-  .chip {
-    font-family: 'Press Start 2P', monospace; font-size: 8px;
-    border: 1px solid var(--accent2); color: var(--accent2);
-    padding: 6px 8px; cursor: pointer;
-  }
-  .chip:hover { background: var(--panel); }
-  .chip .x { color: var(--bad); margin-right: 5px; }
-  input.time {
-    font-family: 'VT323', monospace; font-size: 19px; width: 120px;
-    background: var(--bg); color: var(--accent); border: 2px solid var(--border);
-    padding: 5px 8px; text-align: center;
-  }
-
+  /* ---------------- primitives ---------------- */
   .btn {
-    font-family: 'VT323', monospace; font-size: 21px;
-    background: var(--panel2); color: var(--text);
-    border: 2px solid var(--border); padding: 8px 16px; cursor: pointer;
-    box-shadow: 0 3px 0 #00000066;
+    font-family:'VT323', monospace; font-size:22px; line-height:1;
+    background:var(--panel2); color:var(--text);
+    border:2px solid var(--border); cursor:pointer;
+    min-height:48px; padding:0 20px;
+    box-shadow:0 4px 0 rgba(0,0,0,.35); position:relative; top:0; border-radius:0;
+    transition:top .06s step-end, box-shadow .06s step-end, background .15s, color .15s;
   }
-  .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #000; }
-  .btn.pri { background: var(--accent); color: var(--bg); border-color: var(--text); }
-  .btn.small { font-size: 18px; padding: 6px 12px; }
-  .btnbar { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn:hover { background:var(--accent2); color:var(--bg); border-color:var(--text); }
+  .btn:active { top:4px; box-shadow:0 0 0 rgba(0,0,0,.35); }
+  .btn.pri { background:var(--accent); color:var(--bg); border-color:var(--text); }
+  .btn.pri:hover { background:var(--text); color:var(--bg); }
+  .btn.ghost { background:transparent; border-style:dashed; }
+  .btn.danger { background:var(--bad); color:#fff; border-color:#fff; }
+  .btn:disabled { opacity:.45; cursor:not-allowed; top:0; }
+  .btn.ic { display:inline-flex; align-items:center; gap:8px; }
+  .btn.small { min-height:40px; padding:0 14px; font-size:19px; }
 
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 4px 0 6px; }
-  .stat { background: var(--panel); border: 2px solid var(--border); padding: 12px; text-align: center; }
-  .stat .n { font-size: 24px; color: var(--accent); }
-  .stat .c { font-size: 14px; color: var(--muted); }
-
-  .empty { color: var(--muted); text-align: center; padding: 26px 0; font-size: 20px; }
-
-  /* ---- bottom activity log strip ---- */
-  .logwrap {
-    grid-column: 1 / -1; grid-row: 2;
-    border-top: 3px solid var(--border);
-    background: var(--panel);
-    display: flex; flex-direction: column;
-    height: 160px; flex: none;
+  .card {
+    background:var(--panel); border:2px solid var(--border);
+    padding:18px; box-shadow:5px 5px 0 rgba(0,0,0,.18);
   }
-  .log-head {
-    font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--accent2);
-    padding: 8px 14px; border-bottom: 2px dashed var(--panel2);
+  .card-h {
+    font-family:'Press Start 2P', monospace; font-size:11px; letter-spacing:1px;
+    color:var(--accent); text-transform:uppercase;
+    display:flex; align-items:center; gap:8px; margin-bottom:12px;
   }
-  .log { flex: 1; overflow-y: auto; padding: 8px 14px; font-size: 17px; line-height: 1.6; color: var(--muted); }
-  .log .ok { color: var(--ok); }
-  .log .er { color: var(--bad); }
-  .log .wa { color: var(--warn); }
-  .log .ts { color: var(--muted); opacity: .75; }
+  .card-h::before { content:"▸"; color:var(--accent2); }
+  .muted { color:var(--muted); }
+  .okc { color:var(--ok); } .wac { color:var(--warn); } .bdc { color:var(--bad); }
+  .big { font-size:34px; line-height:1.1; }
+  .row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  @media (max-width:900px){ .grid2,.grid3{ grid-template-columns:1fr; } }
 
-  /* toast */
-  .toast {
-    position: fixed; bottom: 190px; left: 50%; transform: translateX(-50%);
-    background: var(--panel2); border: 2px solid var(--border); color: var(--text);
-    padding: 10px 18px; font-size: 19px; display: none; z-index: 50;
-    box-shadow: 4px 4px 0 #00000055;
+  /* ---------------- titlebar ---------------- */
+  #titlebar {
+    display:flex; align-items:center; gap:14px;
+    padding:12px 16px; background:var(--panel); border-bottom:3px solid var(--border); height:72px;
   }
+  .brand { display:flex; align-items:center; gap:10px; }
+  .brand .logo {
+    width:36px; height:36px; background:var(--accent); color:var(--bg); font-size:17px;
+    display:grid; place-items:center; font-family:'Press Start 2P', monospace;
+    box-shadow:0 0 0 2px var(--text);
+  }
+  .brand .lbl { font-family:'Press Start 2P', monospace; font-size:16px; color:var(--accent); letter-spacing:1px; }
+  .t-spacer { flex:1; }
+  .titlebar-time { font-size:32px; color:var(--accent2); letter-spacing:1px; line-height:1; }
+  .t-status { display:flex; align-items:center; gap:8px; font-size:19px; color:var(--muted); }
+  .t-status .pulse { width:12px; height:12px; background:var(--ok); animation:blink 1.6s steps(2) infinite; }
+  .t-status.fail .pulse { background:var(--bad); animation:none; }
+  @keyframes blink { 50% { opacity:.2; } }
+
+  /* ---------------- shell: nav | stage ---------------- */
+  #shell { flex:1; display:flex; min-height:0; }
+  nav#side {
+    width:236px; flex:none; padding:14px 10px; background:var(--panel);
+    display:flex; flex-direction:column; gap:6px; border-right:3px solid var(--border);
+    overflow-y:auto;
+  }
+  #side .side-title {
+    font-family:'Press Start 2P', monospace; font-size:10px; color:var(--muted);
+    padding:4px 8px 10px; letter-spacing:1px; text-transform:uppercase;
+    border-bottom:2px dashed var(--panel2); margin-bottom:8px;
+  }
+  .nav-item {
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+    min-height:66px; padding:6px 8px; cursor:pointer; text-align:center;
+    border:2px solid transparent; background:transparent; color:var(--muted);
+    transition:background .15s, color .15s, transform .2s var(--ease);
+  }
+  .nav-item .ni-icon { font-size:27px; line-height:1; }
+  .nav-item .ni-lbl { font-size:15px; letter-spacing:.5px; text-transform:uppercase; }
+  .nav-item:hover { background:var(--panel2); color:var(--text); transform:translateX(4px); }
+  .nav-item.active {
+    background:var(--bg); border-color:var(--accent); color:var(--accent);
+    box-shadow:4px 4px 0 var(--border);
+  }
+  .nav-item .ni-badge {
+    font-size:13px; color:var(--bg); background:var(--accent2); padding:0 6px; min-width:20px; height:20px;
+    line-height:20px; text-align:center; position:absolute; margin-left:66px; margin-top:-58px;
+  }
+
+  /* ---------------- stage / pages (slide in/out) ---------------- */
+  main#stage { flex:1; overflow:hidden; position:relative; min-width:0; }
+  .page {
+    position:absolute; inset:0; overflow-y:auto; padding:20px 28px 40px;
+    opacity:0; transform:translateX(48px); pointer-events:none;
+    transition:opacity .25s var(--ease), transform .4s var(--ease);
+  }
+  .page.on { opacity:1; transform:translateX(0); pointer-events:auto; }
+
+  .page-title { font-family:'Press Start 2P', monospace; font-size:17px; color:var(--text); margin-bottom:4px; }
+  .page-sub { color:var(--muted); font-size:19px; margin-bottom:18px; }
+
+  /* ---------------- dashboard ---------------- */
+  .hero {
+    background:var(--panel); border:2px solid var(--border); padding:22px;
+    margin-bottom:18px; box-shadow:6px 6px 0 rgba(0,0,0,.2);
+    display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+  }
+  .hero .hb { font-size:38px; line-height:1.1; }
+  .hero .hs { font-size:20px; color:var(--muted); margin-top:4px; }
+  .stat {
+    background:var(--panel); border:2px solid var(--border); padding:16px; text-align:center;
+    box-shadow:4px 4px 0 rgba(0,0,0,.15);
+  }
+  .stat .n { font-size:38px; color:var(--accent); line-height:1; }
+  .stat .c { font-size:16px; color:var(--muted); letter-spacing:1px; margin-top:6px; text-transform:uppercase; }
+
+  /* ---------------- repos grid ---------------- */
+  .repo-card {
+    background:var(--panel); border:2px solid var(--border); padding:16px;
+    box-shadow:5px 5px 0 rgba(0,0,0,.18);
+    transition:transform .25s var(--ease), box-shadow .25s var(--ease);
+    animation:pop .3s var(--ease) both;
+  }
+  .repo-card:hover { transform:translateY(-4px); box-shadow:5px 9px 0 rgba(0,0,0,.22); }
+  @keyframes pop { from { opacity:0; transform:translateY(14px) scale(.97); } }
+  .rc-head { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .rc-name { font-size:30px; line-height:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .rc-dot { width:14px; height:14px; border:2px solid var(--panel2); flex:none; }
+  .rc-dot.ok { background:var(--ok); } .rc-dot.warn { background:var(--warn); } .rc-dot.err { background:var(--bad); }
+  .rc-path { font-size:17px; color:var(--muted); word-break:break-all; margin-bottom:10px; }
+  .badge {
+    font-family:'Press Start 2P', monospace; font-size:9px;
+    border:1px solid var(--accent2); color:var(--accent2); padding:5px 8px; letter-spacing:.5px;
+  }
+  .badge.okc { border-color:var(--ok); color:var(--ok); }
+  .badge.bdc { border-color:var(--bad); color:var(--bad); }
+  .chiprow { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:10px 0; }
+  .chip {
+    font-family:'Press Start 2P', monospace; font-size:9px;
+    border:1px solid var(--accent2); color:var(--accent2); padding:7px 9px; cursor:pointer;
+    display:inline-flex; align-items:center; gap:7px; letter-spacing:.5px;
+    transition:background .12s, color .12s;
+  }
+  .chip .x { color:var(--bad); font-size:12px; line-height:1; }
+  .chip:hover { background:var(--accent2); color:var(--bg); }
+  .chip:hover .x { color:var(--bg); }
+  .chip.add { border-style:dashed; color:var(--ok); border-color:var(--ok); }
+  .chip.add:hover { background:var(--ok); color:var(--bg); }
+
+  /* ---------------- clock (the time mini-game) ---------------- */
+  .clockbox {
+    display:flex; gap:26px; align-items:center; justify-content:center; flex-wrap:wrap;
+    background:var(--panel); border:2px solid var(--border); padding:22px;
+    box-shadow:6px 6px 0 rgba(0,0,0,.2);
+  }
+  svg.clock { display:block; cursor:crosshair; touch-action:none; }
+  .clock .face { fill:var(--panel2); stroke:var(--border); stroke-width:4; }
+  .clock .tick { stroke:var(--muted); stroke-width:3; }
+  .clock .tick.major { stroke:var(--text); stroke-width:4; }
+  .clock .num { fill:var(--muted); font-family:'Press Start 2P', monospace; font-size:13px; text-anchor:middle; }
+  .clock .num.act { fill:var(--accent); }
+  .clock .handH { stroke:var(--accent); stroke-width:7; stroke-linecap:square; }
+  .clock .handM { stroke:var(--accent2); stroke-width:5; stroke-linecap:square; }
+  .clock .pin { fill:var(--text); stroke:var(--bg); stroke-width:3; }
+  .clock .dragring { stroke:var(--accent); stroke-width:2; fill:none; stroke-dasharray:4 4; opacity:0; transition:opacity .2s; }
+  .clock.dragging .dragring { opacity:1; }
+
+  .dread {
+    font-family:'Press Start 2P', monospace; font-size:40px; color:var(--accent);
+    letter-spacing:3px; text-align:center; line-height:1;
+    background:var(--bg); border:3px solid var(--border); padding:18px 10px;
+    box-shadow:inset 0 0 0 3px var(--panel2);
+  }
+  .dread small { display:block; font-size:11px; color:var(--muted); margin-top:8px; letter-spacing:1px; }
+  .mode-switch { display:flex; border:2px solid var(--border); }
+  .mode-switch .m {
+    padding:10px 18px; cursor:pointer; font-size:20px; text-transform:uppercase;
+    background:var(--panel2); color:var(--muted);
+  }
+  .mode-switch .m.act { background:var(--accent); color:var(--bg); }
+  .stepper { display:flex; align-items:center; border:2px solid var(--border); }
+  .stepper button {
+    width:46px; height:46px; font-size:26px; background:var(--panel2); color:var(--accent);
+    border:0; cursor:pointer;
+  }
+  .stepper button:hover { background:var(--accent); color:var(--bg); }
+  .stepper .val {
+    min-width:150px; text-align:center; font-family:'Press Start 2P', monospace;
+    font-size:24px; padding:10px; background:var(--bg); color:var(--text); letter-spacing:2px;
+  }
+  .clock-hint { font-size:18px; color:var(--muted); text-align:center; margin-top:8px; }
+
+  /* ---------------- activity ---------------- */
+  .log-entry {
+    display:flex; gap:12px; padding:9px 4px; border-bottom:2px dashed var(--panel2);
+    font-size:19px; animation:pop .3s var(--ease) both;
+  }
+  .log-entry .ts { color:var(--muted); flex:none; }
+  .log-entry .msg { flex:1; }
+  .log-entry .lvl { flex:none; width:64px; text-align:center; font-family:'Press Start 2P', monospace; font-size:9px; padding-top:3px; }
+  .lvl.INFO { color:var(--ok); } .lvl.WARN { color:var(--warn); } .lvl.ERROR { color:var(--bad); }
+
+  /* ---------------- settings ---------------- */
+  .theme-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px; }
+  .theme-card {
+    border:3px solid var(--border); background:var(--panel2); cursor:pointer; padding:14px;
+    text-align:center; transition:transform .2s var(--ease), box-shadow .2s var(--ease);
+  }
+  .theme-card:hover { transform:translateY(-4px); }
+  .theme-card.active { box-shadow:0 0 0 4px var(--bg), 0 0 0 6px var(--accent); }
+  .theme-card .sw { width:100%; height:44px; border:2px solid var(--border); margin-bottom:10px; }
+  .theme-card .tn { font-family:'Press Start 2P', monospace; font-size:10px; text-transform:uppercase; letter-spacing:.5px; }
+  .toggle { display:flex; align-items:center; gap:14px; cursor:pointer; }
+  .toggle .sw-box {
+    width:64px; height:34px; border:2px solid var(--border); background:var(--panel2); position:relative;
+    transition:background .2s;
+  }
+  .toggle .knob {
+    width:26px; height:26px; background:var(--accent2); position:absolute; top:2px; left:2px;
+    transition:left .25s var(--ease);
+  }
+  .toggle.on .sw-box { background:var(--ok); }
+  .toggle.on .knob { left:32px; background:var(--bg); }
+
+  /* ---------------- bottom statusbar (slides in) ---------------- */
+  #statusbar {
+    height:44px; background:var(--panel); border-top:3px solid var(--border);
+    display:flex; align-items:center; gap:16px; padding:0 16px; font-size:18px;
+    color:var(--muted); overflow:hidden; white-space:nowrap;
+  }
+  #statusbar .s-repo { color:var(--accent2); }
+  #statusbar .s-msg { overflow:hidden; text-overflow:ellipsis; }
+  #statusbar .s-anim { animation:marq 12s linear infinite; }
+
+  /* ---------------- drawer (slides up) ---------------- */
+  #scrim {
+    position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:90;
+    opacity:0; pointer-events:none; transition:opacity .3s;
+  }
+  #scrim.on { opacity:1; pointer-events:auto; }
+  #drawer {
+    position:fixed; left:0; right:0; bottom:0; z-index:100;
+    background:var(--bg); border-top:4px solid var(--border);
+    box-shadow:0 -12px 40px rgba(0,0,0,.45);
+    transform:translateY(105%); transition:transform .45s var(--ease);
+    padding:22px 28px 28px;
+  }
+  #drawer.on { transform:translateY(0); }
+  .drawer-handle {
+    width:64px; height:6px; background:var(--border); margin:0 auto 14px; cursor:grab;
+  }
+  .drawer-close { position:absolute; right:18px; top:14px; }
+
+  /* ---------------- toast (slides up) ---------------- */
+  #toast {
+    position:fixed; left:50%; bottom:60px; transform:translate(-50%, 90px);
+    background:var(--panel2); color:var(--text); border:3px solid var(--border);
+    box-shadow:6px 6px 0 rgba(0,0,0,.4);
+    padding:12px 24px; font-size:22px; z-index:150;
+    transition:transform .35s var(--ease); pointer-events:none;
+    max-width:80%; text-align:center;
+  }
+  #toast.on { transform:translate(-50%, 0); }
+  #toast.bad { border-color:var(--bad); color:var(--bad); }
+  #toast.good { border-color:var(--ok); color:var(--ok); }
+
+  /* ---------------- busy overlay ---------------- */
+  #pushbar {
+    position:fixed; left:0; top:0; height:6px; width:0; z-index:300;
+    background:linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  body.busy #pushbar { width:100%; transition:width .2s linear; animation:none; }
+
+  .empty { color:var(--muted); text-align:center; padding:30px 0; font-size:22px; }
+  ::-webkit-scrollbar { width:14px; height:14px; }
+  ::-webkit-scrollbar-track { background:var(--panel); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border:3px solid var(--panel); }
 </style>
 </head>
-<body>
+<body class="hi">
+<div id="pushbar"></div>
 
-  <div class="toolbar">
-    <div class="hud">▓ TIDY</div>
-    <div class="right">
-      <span class="statusline" id="statusLine">—</span>
-      <div id="themeDots" style="display:flex;gap:6px"></div>
-      <button class="btn small" id="btnPullAll">PULL ALL</button>
-      <button class="btn small pri" id="btnBackupAll">BACKUP ALL</button>
-    </div>
+<div id="titlebar">
+  <div class="brand">
+    <div class="logo">T</div>
+    <div class="lbl">TIDY</div>
   </div>
+  <div class="sep"></div>
+  <div class="t-status" id="tStatus"><div class="pulse"></div><span id="tStatusMsg">loading…</span></div>
+  <div class="t-spacer"></div>
+  <div class="titlebar-time" id="tTime">--:--</div>
+  <div class="sep"></div>
+  <button class="btn ghost ic" id="btnPullAll">◀ PULL ALL</button>
+  <button class="btn pri ic" id="btnBackupAll">▶ BACKUP ALL</button>
+</div>
 
-  <div class="workspace">
-    <div class="sidebar">
-      <div class="side-head">◈ REPOS</div>
-      <div id="repolist"></div>
-      <button class="btn btn-add" id="btnAddRepo">＋ ADD REPO…</button>
-    </div>
+<div id="shell">
+  <nav id="side">
+    <div class="side-title">◆ menu</div>
+    <div class="nav-item" data-page="overview"><span class="ni-icon">🖥</span><span class="ni-lbl">Overview</span><span class="ni-badge" id="navRepos"></span></div>
+    <div class="nav-item" data-page="repos"><span class="ni-icon">🗂</span><span class="ni-lbl">Repos</span></div>
+    <div class="nav-item" data-page="clock"><span class="ni-icon">🕐</span><span class="ni-lbl">Clock</span></div>
+    <div class="nav-item" data-page="activity"><span class="ni-icon">📜</span><span class="ni-lbl">Activity</span></div>
+    <div class="nav-item" data-page="settings"><span class="ni-icon">⚙</span><span class="ni-lbl">Settings</span></div>
+  </nav>
 
-    <div class="main" id="main">
-      <div id="detail"></div>
-    </div>
+  <main id="stage">
+    <section class="page" id="p-overview"></section>
+    <section class="page" id="p-repos"></section>
+    <section class="page" id="p-clock"></section>
+    <section class="page" id="p-activity"></section>
+    <section class="page" id="p-settings"></section>
+  </main>
+</div>
 
-    <div class="logwrap">
-      <div class="log-head">▨ ACTIVITY LOG</div>
-      <div class="log" id="log"></div>
-    </div>
-  </div>
+<div id="statusbar"><span class="s-repo" id="sRepo">tidy</span><span class="s-msg" id="sMsg">ready</span></div>
 
-  <div class="toast" id="toast"></div>
-  <script src="app.js"></script>
+<div id="scrim"></div>
+<div id="drawer"></div>
+<div id="toast"></div>
+
+<script src="app.js"></script>
 </body>
 </html>
