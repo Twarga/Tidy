@@ -1,0 +1,16 @@
+# Tidy daemon — user service (desktop laptop)
+# Install with: bash install.sh
+# or by copying to: ~/.config/systemd/user/tidy.service
+#   systemctl --user daemon-reload && systemctl --user enable --now tidy
+
+[Unit]
+Description=Tidy backup & sync daemon
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/tidy serve
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target

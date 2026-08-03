@@ -179,8 +179,9 @@ def cmd_logs(args: argparse.Namespace) -> int:
 
 
 def cmd_serve(_: argparse.Namespace) -> int:
-    ui.print_warn("`tidy serve` arrives in Phase 4 (24/7 daemon). Coming soon!")
-    return 0
+    from tidy.daemon import serve
+
+    return serve()
 
 
 def cmd_tui(_: argparse.Namespace) -> int:

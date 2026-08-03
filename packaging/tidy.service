@@ -1,0 +1,19 @@
+# Tidy daemon — system service (VPS / server install)
+# Install with: bash install.sh --server
+#   sudo cp packaging/tidy.service /etc/systemd/system/tidy.service
+#   sudo systemctl daemon-reload && sudo systemctl enable --now tidy
+
+[Unit]
+Description=Tidy backup & sync daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/home/%i/.local/bin/tidy serve
+Environment=USER=%i
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
