@@ -72,7 +72,21 @@ tidy backup all          # push everything now
 tidy pull ~/Notes
 tidy serve               # daemon mode → 24/7 engine, no GUI
 tidy tui                 # interactive full-screen terminal UI
+tidy gui                 # desktop pixel GUI (window + system tray mini-panel)
+tidy-gui                 # same as `tidy gui` (direct entry point)
 ```
+
+### 🖥️ Desktop GUI (Phase 5)
+
+`tidy gui` (or `tidy-gui`) opens a pywebview window with the pixel dashboard:
+
+- **Repo cards** — path, remote status, schedule chips (click ✕ to remove, ＋ ADD TIME for another slot)
+- **Actions** — BACKUP + PUSH ALL, PULL ALL, per-repo ▶ PUSH, ＋ ADD REPO (native folder dialog)
+- **Theme switcher** — live pixel theme dots (Neon Grid, CRT Terminal, Game Boy, Watermelon, Paper Desk)
+- **Activity log** — live tail of the JSONL log (polls every 4s)
+- **System tray** — right-click mini-panel: status line, per-repo push, backup/pull all, theme menu, show window, quit
+
+The tray is skipped automatically when no display is available (headless VPS).
 
 ---
 

@@ -57,6 +57,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     sub.add_parser("serve", help="run the 24/7 daemon (Phase 4)")
     sub.add_parser("tui", help="full-screen terminal UI (Phase 3)")
+    sub.add_parser("gui", help="desktop pixel GUI (Phase 5)")
     return parser
 
 
@@ -191,6 +192,13 @@ def cmd_tui(_: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_gui(_: argparse.Namespace) -> int:
+    from tidy.gui.main import main as gui_main
+
+    gui_main()
+    return 0
+
+
 COMMANDS = {
     "status": cmd_status,
     "add": cmd_add,
@@ -203,6 +211,7 @@ COMMANDS = {
     "logs": cmd_logs,
     "serve": cmd_serve,
     "tui": cmd_tui,
+    "gui": cmd_gui,
 }
 
 

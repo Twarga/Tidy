@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="neon">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIDY</title>
+<style>
+  @font-face {
+    font-family: 'VT323'; font-style: normal; font-weight: 400; font-display: swap;
+    src: url('fonts/vt323.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Press Start 2P'; font-style: normal; font-weight: 400; font-display: swap;
+    src: url('fonts/pressstart2p.woff2') format('woff2');
+  }
+
+  /* ===== theme variables ===== */
+  :root[data-theme="neon"]      { --bg:#150a2e; --panel:#1d1244; --panel2:#2a1a5e; --border:#21f3d9; --accent:#ff4fd8; --accent2:#21d0ff; --text:#f6f2ff; --muted:#b9aee6; --ok:#21f371; --warn:#ffc93c; --bad:#ff5c7a; }
+  :root[data-theme="crt"]       { --bg:#04070a; --panel:#0a1216; --panel2:#0f1e1e; --border:#2bffb0; --accent:#7dff8a; --accent2:#e0ff5e; --text:#c6ffd9; --muted:#5fbf8f; --ok:#3dff7a; --warn:#ffd166; --bad:#ff6b6b; }
+  :root[data-theme="gameboy"]   { --bg:#aebcba; --panel:#cfd8d5; --panel2:#e3ebe8; --border:#0f380f; --accent:#9bbc0f; --accent2:#5d7a1f; --text:#1f3a12; --muted:#57723f; --ok:#0f380f; --warn:#9bbc0f; --bad:#7a1212; }
+  :root[data-theme="watermelon"]{ --bg:#ff3d5a; --panel:#ffe9f0; --panel2:#fff4f8; --border:#ff2d55; --accent:#2b8c3e; --accent2:#1e6d31; --text:#3a1020; --muted:#a04a62; --ok:#2fb25a; --warn:#ff9f1c; --bad:#ff2d55; }
+  :root[data-theme="paper"]     { --bg:#efe7d4; --panel:#f6f1e3; --panel2:#fffdf5; --border:#5a4a36; --accent:#c1440e; --accent2:#47597e; --text:#3a342a; --muted:#8a7f6b; --ok:#4a7b3a; --warn:#c98a2b; --bad:#c1440e; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'VT323', monospace;
+    font-size: 19px;
+    background: var(--bg);
+    color: var(--text);
+    padding: 22px;
+    min-height: 100vh;
+  }
+  .window {
+    max-width: 760px; margin: 0 auto;
+    background: var(--panel);
+    border: 3px solid var(--border);
+    box-shadow: 6px 6px 0 #00000055;
+    padding: 0 0 14px;
+  }
+  .titlebar {
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--panel2); border-bottom: 3px solid var(--border);
+    padding: 12px 18px;
+  }
+  .titlebar .hud { font-family: 'Press Start 2P', monospace; font-size: 12px; color: var(--accent); }
+  .body { padding: 16px 20px; }
+
+  .banner {
+    display: flex; gap: 12px; align-items: center;
+    border: 2px solid var(--border); background: var(--panel2);
+    padding: 12px 14px; margin-bottom: 16px;
+  }
+  .dot { width: 14px; height: 14px; background: var(--ok); border: 2px solid var(--text); animation: blink 1.4s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: .3; } }
+  .stat-t { font-size: 22px; color: var(--ok); }
+  .stat-s { font-size: 15px; color: var(--muted); }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+  .stat { border: 2px solid var(--border); background: var(--panel2); padding: 12px; text-align: center; }
+  .stat .n { font-size: 24px; color: var(--accent); }
+  .stat .c { font-size: 14px; color: var(--muted); }
+
+  .card { margin-bottom: 18px; }
+  .card-h {
+    font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--accent2);
+    border-bottom: 2px dashed var(--panel2); padding: 2px 0 8px; margin-bottom: 12px;
+  }
+  .repo {
+    border: 2px solid var(--border); background: var(--panel2);
+    padding: 12px 14px; margin-bottom: 10px;
+  }
+  .repo .rn { font-size: 21px; color: var(--accent); }
+  .repo .rp { font-size: 14px; color: var(--muted); }
+  .repo .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .chip {
+    font-family: 'Press Start 2P', monospace; font-size: 8px;
+    border: 1px solid var(--accent2); color: var(--accent2);
+    padding: 5px 7px; cursor: pointer;
+  }
+  .chip:hover { background: var(--panel); }
+  input.time {
+    font-family: 'VT323', monospace; font-size: 18px; width: 90px;
+    background: var(--bg); color: var(--text); border: 2px solid var(--border); padding: 5px;
+  }
+  .btn {
+    font-family: 'VT323', monospace; font-size: 20px;
+    background: var(--panel2); color: var(--text);
+    border: 2px solid var(--border); padding: 7px 13px; cursor: pointer;
+    box-shadow: 0 3px 0 #00000066;
+  }
+  .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #000; }
+  .btn.pri { background: var(--accent); color: var(--bg); border-color: var(--text); }
+  .btnbar { display: flex; gap: 10px; margin: 6px 0 14px; flex-wrap: wrap; }
+  .btnbar .btn { flex: 1; min-width: 120px; }
+
+  .themes { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .th { width: 72px; height: 50px; border: 3px solid var(--muted); cursor: pointer; }
+  .th.active { border-color: var(--accent); }
+
+  .log {
+    border: 2px solid var(--border); background: var(--bg);
+    padding: 10px 12px; height: 200px; overflow-y: auto;
+    font-size: 17px; line-height: 1.6; color: var(--muted);
+  }
+  .log .ok { color: var(--ok); } .log .er { color: var(--bad); } .log .wa { color: var(--warn); }
+  .log .ts { color: var(--muted); opacity: .7; }
+  .empty { color: var(--muted); text-align: center; padding: 18px 0; }
+</style>
+</head>
+<body>
+  <div class="window">
+    <div class="titlebar">
+      <div class="hud">▓ TIDY</div>
+      <div class="stat-s" id="themeLabel">theme: neon</div>
+    </div>
+    <div class="body">
+      <div class="banner">
+        <div class="dot"></div>
+        <div>
+          <div class="stat-t" id="statusText">STATUS: READY</div>
+          <div class="stat-s" id="statusSub">—</div>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="n" id="statLast">—</div><div class="c">LAST BACKUP</div></div>
+        <div class="stat"><div class="n" id="statRepos">0</div><div class="c">REPOS</div></div>
+        <div class="stat"><div class="n" id="statPushes">0</div><div class="c">PUSHES</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-h">◈ REPOSITORIES</div>
+        <div id="repos"></div>
+        <div class="btnbar" style="margin-top:10px"><button class="btn" id="btnAddRepo">＋ ADD REPO…</button></div>
+      </div>
+
+      <div class="card">
+        <div class="card-h">◈ ACTION</div>
+        <div class="btnbar">
+          <button class="btn pri" id="btnBackupAll">BACKUP + PUSH ALL</button>
+          <button class="btn" id="btnPullAll">PULL ALL</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h">▨ THEME</div>
+        <div class="themes" id="themes"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-h">▨ ACTIVITY LOG</div>
+        <div class="log" id="log"></div>
+      </div>
+    </div>
+  </div>
+
+<script src="app.js"></script>
+</body>
+</html>

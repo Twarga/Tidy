@@ -25,7 +25,7 @@ Homepage = "https://github.com/Twarga/Tidy"
 Repository = "https://github.com/Twarga/Tidy"
 
 [project.optional-dependencies]
-gui = ["pywebview>=5", "pillow"]
+gui = ["pywebview>=5", "pillow", "pystray>=0.19"]
 mcp = ["fastmcp>=2"]
 tui = ["textual>=0.80"]
 scheduler = ["apscheduler>=3.10"]
@@ -33,7 +33,7 @@ dev = ["pytest>=8", "pytest-asyncio>=0.24", "ruff>=0.6", "build>=1.2"]
 
 [project.scripts]
 tidy = "tidy.cli:main"
-tidy-gui = "tidy.gui:main"
+tidy-gui = "tidy.gui.main:main"
 tidy-mcp = "tidy.mcp:main"
 
 [tool.setuptools.packages.find]

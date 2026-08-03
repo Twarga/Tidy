@@ -35,6 +35,28 @@ def test_no_command_prints_help(capsys):
     assert "usage" in capsys.readouterr().out
 
 
+def test_all_subcommands_registered(capsys):
+    for cmd in (
+        "status",
+        "add",
+        "remove",
+        "schedule",
+        "unschedule",
+        "backup",
+        "pull",
+        "theme",
+        "logs",
+        "serve",
+        "tui",
+        "gui",
+    ):
+        with pytest.raises(SystemExit):
+            main([cmd, "--help"])  # argparse exits 0 after printing help
+    out = capsys.readouterr().out + capsys.readouterr().err
+    for cmd in ("gui", "serve", "tui"):
+        assert cmd in out
+
+
 def test_version_prints(capsys):
     with pytest.raises(SystemExit):
         main(["--version"])
