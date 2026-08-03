@@ -221,11 +221,11 @@ Config  ~/.config/tidy/config.json
 
 | ID | Task | Details | Files |
 |---|---|---|---|
-| 7.1 | `install.sh` polish | tested both modes; idempotent (re-run safe) | `install.sh` |
-| 7.2 | MCP auto-register | install.sh optionally writes Claude Desktop config | `install.sh` |
-| 7.3 | AppImage build script | PyInstaller → AppDir → `appimagetool` → `tidy-0.1.0-x86_64.AppImage` | `packaging/build-appimage.sh` |
-| 7.4 | AppImage runtime | bundle python runtime + pywebview + fonts; verify runs on fresh Fedora/Ubuntu | `packaging/` |
-| 7.5 | Release | GitHub Release v0.1.0 with AppImage + install.sh + changelog | GitHub |
+| ✅ 7.1 | `install.sh` polish | tested both modes; idempotent (re-run safe) | `install.sh` |
+| ✅ 7.2 | MCP auto-register | install.sh optionally writes Claude Desktop config | `install.sh` |
+| ✅ 7.3 | AppImage build script | PyInstaller → AppDir → `appimagetool` → `tidy-0.1.0-x86_64.AppImage` | `packaging/build-appimage.sh` |
+| ✅ 7.4 | AppImage runtime | bundle python runtime + pywebview + fonts; verify runs on fresh Fedora/Ubuntu | `packaging/` |
+| ✅ 7.5 | Release | GitHub Release v0.1.0 with AppImage + install.sh + changelog | GitHub |
 
 **Phase 7 exit criteria:** clean VM install with `install.sh` (desktop & --server) works; AppImage launches on another machine.
 

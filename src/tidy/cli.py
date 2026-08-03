@@ -58,6 +58,7 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("serve", help="run the 24/7 daemon (Phase 4)")
     sub.add_parser("tui", help="full-screen terminal UI (Phase 3)")
     sub.add_parser("gui", help="desktop pixel GUI (Phase 5)")
+    sub.add_parser("mcp", help="run the MCP server over stdio (Phase 6)")
     return parser
 
 
@@ -199,6 +200,17 @@ def cmd_gui(_: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_mcp(_: argparse.Namespace) -> int:
+    try:
+        from tidy.mcp import main as mcp_main
+    except ImportError:
+        print('✗ MCP support not installed — pip install "tidy[mcp]"', file=sys.stderr)
+        return 1
+
+    mcp_main()
+    return 0
+
+
 COMMANDS = {
     "status": cmd_status,
     "add": cmd_add,
@@ -212,6 +224,7 @@ COMMANDS = {
     "serve": cmd_serve,
     "tui": cmd_tui,
     "gui": cmd_gui,
+    "mcp": cmd_mcp,
 }
 
 

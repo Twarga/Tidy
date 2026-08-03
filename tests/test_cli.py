@@ -49,11 +49,12 @@ def test_all_subcommands_registered(capsys):
         "serve",
         "tui",
         "gui",
+        "mcp",
     ):
         with pytest.raises(SystemExit):
             main([cmd, "--help"])  # argparse exits 0 after printing help
     out = capsys.readouterr().out + capsys.readouterr().err
-    for cmd in ("gui", "serve", "tui"):
+    for cmd in ("gui", "serve", "tui", "mcp"):
         assert cmd in out
 
 

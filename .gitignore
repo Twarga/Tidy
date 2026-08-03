@@ -28,3 +28,7 @@ Thumbs.db
 # AppImage build artifacts
 AppDir/
 *.AppImage
+.venv-build/
+dist-appimage/
+build-appimage/
+packaging/.tools/
