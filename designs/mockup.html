@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixelboard Sync — Mockup v2</title>
+<style>
+  /* ===== PIXEL FONTS: Press Start 2P for headings, VT323 for reading ===== */
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #14151f;
+    --panel: #23243a;
+    --panel2: #31335c;
+    --border: #8ef0c4;
+    --accent: #57e39a;
+    --green: #57e39a;
+    --red: #ff6b81;
+    --amber: #f8c86a;
+    --blue: #7d8dff;
+    --text: #ffffff;
+    --muted: #aab0d8;
+  }
+
+  body {
+    font-family: 'VT323', monospace;
+    background:
+      radial-gradient(circle at 20% 20%, #232a4d 0%, transparent 55%),
+      radial-gradient(circle at 80% 85%, #3a1f45 0%, transparent 55%),
+      var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 34px 12px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  /* ==== PIXEL WINDOW SHELL ==== */
+  .pixel-window {
+    width: 660px;
+    max-width: 98%;
+    background: var(--panel);
+    border: 3px solid var(--border);
+    box-shadow: 6px 6px 0 0 #00000088;
+    position: relative;
+  }
+
+  /* title bar */
+  .titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--panel2);
+    border-bottom: 3px solid var(--border);
+  }
+  .titlebar .hud {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+  .titlebar .icons span { margin-left: 10px; color: var(--muted); }
+  .titlebar .icons span.close { color: var(--red); }
+
+  .pixel-btn {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    letter-spacing: 1px;
+    background: var(--panel2);
+    color: var(--text);
+    border: 2px solid var(--border);
+    padding: 8px 14px;
+    cursor: pointer;
+    box-shadow: 0 3px 0 0 #00000088;
+    transition: transform .05s, box-shadow .05s;
+  }
+  .pixel-btn:hover { background: #3a3d6e; }
+  .pixel-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 0 #000; }
+  .pixel-btn.primary { background: #1d6a45; border-color: var(--accent); color: #d9ffe8; }
+
+  .pixel-btn.small { font-size: 18px; padding: 6px 10px; }
+
+  .window-body { padding: 20px 22px 22px; }
+
+  /* status banner */
+  .status-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #181a2e;
+    border: 2px solid var(--border);
+    padding: 14px 16px;
+    margin-bottom: 18px;
+  }
+  .status-dot {
+    width: 14px; height: 14px;
+    background: var(--green);
+    border: 2px solid #eafff2;
+    animation: blink 1.4s steps(2) infinite;
+    flex: none;
+  }
+  @keyframes blink { 50% { opacity: .25; } }
+  .status-text { font-size: 22px; color: var(--green); line-height: 1.2; }
+  .status-sub  { font-size: 17px; color: var(--muted); margin-top: 3px; }
+
+  /* cards */
+  .card { margin-bottom: 20px; }
+  .card-head {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: var(--border);
+    padding: 4px 2px 8px;
+    border-bottom: 2px dashed var(--panel2);
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .row .label { font-size: 20px; }
+
+  /* toggle */
+  .toggle {
+    width: 64px; height: 28px;
+    background: #0e0f1e;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    flex: none;
+  }
+  .toggle .knob {
+    position: absolute; top: 2px; left: 2px;
+    width: 22px; height: 20px;
+    background: var(--red);
+    transition: left .12s steps(3);
+  }
+  .toggle.on .knob { left: 36px; background: var(--green); }
+
+  /* time picker */
+  .time-wrap { display: flex; align-items: center; gap: 10px; }
+  .timebox {
+    background: #0e0f1e;
+    border: 2px solid var(--border);
+    color: var(--accent);
+    font-family: 'VT323', monospace;
+    font-size: 24px;
+    padding: 6px 10px;
+    width: 130px;
+    text-align: center;
+  }
+  .timebox::-webkit-calendar-picker-indicator { filter: invert(1); opacity: .7; }
+
+  /* stat blocks */
+  .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  .stat {
+    background: var(--panel2);
+    border: 2px solid var(--border);
+    padding: 14px 10px;
+    text-align: center;
+  }
+  .stat .num { font-size: 26px; color: var(--accent); margin-bottom: 6px; }
+  .stat .cap { font-size: 15px; color: var(--muted); line-height: 1.3; }
+
+  /* meter */
+  .meter {
+    width: 100%; height: 20px;
+    background: #0e0f1e;
+    border: 2px solid var(--border);
+    margin: 8px 0 4px;
+  }
+  .meter .fill {
+    height: 100%; width: 0%;
+    background: repeating-linear-gradient(90deg, var(--accent) 0 8px, #1d6a45 8px 10px);
+    transition: width .4s steps(10);
+  }
+
+  .btnbar { display: flex; gap: 10px; margin: 4px 0 14px; }
+  .btnbar .pixel-btn { flex: 1; }
+
+  /* log */
+  .logbox {
+    background: #0e0f1e;
+    border: 2px solid var(--border);
+    padding: 12px 14px;
+    height: 168px;
+    overflow-y: auto;
+    font-size: 19px;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+  .logbox .ok   { color: var(--green); }
+  .logbox .err  { color: var(--red); }
+  .logbox .warn { color: var(--amber); }
+  .logbox .dim  { color: #6f76a8; }
+  .logbox .ts   { color: #5a6090; }
+
+  .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: var(--muted);
+    border-top: 2px dashed var(--panel2);
+    margin-top: 12px;
+    padding-top: 12px;
+    flex-wrap: wrap;
+  }
+  .foot .char { color: var(--accent); }
+
+  hr.px { border: none; border-top: 2px solid var(--panel2); margin: 16px 0; }
+
+  /* toast */
+  .toast {
+    position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%);
+    background: #101223; border: 2px solid var(--border);
+    color: var(--text); padding: 12px 20px;
+    font-size: 19px; display: none;
+    z-index: 50; box-shadow: 4px 4px 0 0 var(--accent);
+  }
+
+  /* tray */
+  .tray-row {
+    margin-top: 26px;
+    display: flex; align-items: center; gap: 14px;
+    font-size: 20px; color: var(--muted);
+    background: #181a2e;
+    border: 2px solid var(--panel2);
+    padding: 12px 16px;
+  }
+  .tray-ico {
+    width: 26px; height: 26px;
+    background: var(--green); border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: #0e0f1e; flex: none;
+  }
+
+  @media (max-width: 560px) {
+    .stats { grid-template-columns: 1fr 1fr; }
+    .row { flex-direction: column; align-items: flex-start; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="pixel-window">
+    <div class="titlebar">
+      <div class="hud">▓ TIDY</div>
+      <div class="icons"><span>▮</span><span>▢</span><span class="close">✕</span></div>
+    </div>
+
+    <div class="window-body">
+      <!-- status -->
+      <div class="status-banner">
+        <div class="status-dot"></div>
+        <div>
+          <div class="status-text">STATUS: RUNNING · TRACKING</div>
+          <div class="status-sub">Vault: Twarga-System · Repo: Twarga/Obsidian_V</div>
+        </div>
+      </div>
+
+      <!-- stats -->
+      <div class="stats">
+        <div class="stat"><div class="num">03:41</div><div class="cap">LAST<br>BACKUP</div></div>
+        <div class="stat"><div class="num">12</div><div class="cap">FILES<br>TRACKED</div></div>
+        <div class="stat"><div class="num">42</div><div class="cap">PUSHES<br>SO FAR</div></div>
+      </div>
+
+      <!-- control -->
+      <div class="card">
+        <div class="card-head">◈ CONTROL</div>
+
+        <div class="row">
+          <span class="label">AUTO-SYNC (watch vault)</span>
+          <span class="toggle on" id="autoSync"><span class="knob"></span></span>
+        </div>
+
+        <div class="row">
+          <span class="label">DAILY BACKUP TIME</span>
+          <div class="time-wrap">
+            <input type="time" class="timebox" id="backupTime" value="18:00">
+          </div>
+        </div>
+
+        <div class="row">
+          <span class="label">DAILY BACKUP</span>
+          <span class="toggle on" id="dailySwitch"><span class="knob"></span></span>
+        </div>
+      </div>
+
+      <!-- actions -->
+      <div class="card">
+        <div class="card-head">◈ ACTIONS</div>
+        <div class="btnbar">
+          <button class="pixel-btn primary" id="btnBackup">BACKUP + PUSH NOW</button>
+        </div>
+        <div class="btnbar">
+          <button class="pixel-btn small" id="btnPull">PULL</button>
+          <button class="pixel-btn small" id="btnCommit">COMMIT</button>
+          <button class="pixel-btn small" id="btnStatus">CHECK STATUS</button>
+        </div>
+      </div>
+
+      <!-- progress -->
+      <div class="card">
+        <div class="card-head">▮ LAST PUSH</div>
+        <div class="meter"><div class="fill" id="meterFill"></div></div>
+        <div class="foot" style="margin-top:8px; border:none; padding-top:0;">
+          <span id="meterLabel">idle</span>
+          <span style="color:var(--green)">✓ repo synced</span>
+        </div>
+      </div>
+
+      <hr class="px">
+
+      <!-- log -->
+      <div class="card">
+        <div class="card-head">▨ ACTIVITY LOG</div>
+        <div class="logbox" id="logbox">
+          <div><span class="ts">[18:00]</span> <span class="ok">▸ backup 2 commits · push ok</span></div>
+          <div><span class="ts">[17:45]</span> autosync · no changes</div>
+          <div><span class="ts">[17:20]</span> <span class="ok">sync "notes.md" → pushed</span></div>
+          <div><span class="ts">[16:02]</span> <span class="warn">merge pulled from remote → ok</span></div>
+          <div><span class="ts">[15:00]</span> <span class="ok">vault → git committed</span></div>
+        </div>
+      </div>
+
+      <div class="foot">
+        <span>◉ 24/7 RUN · starts at login</span>
+        <span class="char">TWARGA › obsidian</span>
+        <span>v1.0.0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- tray -->
+  <div class="tray-row">
+    <div class="tray-ico">◈</div>
+    <span>SYSTEM TRAY — the app lives here 24/7. Click the icon to open this window.</span>
+  </div>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const toastEl = $('toast');
+  const logEl = $('logbox');
+  const meterFill = $('meterFill');
+  const meterLabel = $('meterLabel');
+
+  function toast(msg){ toastEl.style.display='block'; toastEl.textContent=msg; setTimeout(()=>toastEl.style.display='none',2000); }
+
+  function ts(){ const t=new Date(); return String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0'); }
+
+  function addLog(text, cls){
+    const d=document.createElement('div');
+    d.innerHTML = '<span class="ts">['+ts()+']</span> '+(cls?'<span class="'+cls+'">'+text+'</span>':text);
+    logEl.prepend(d);
+    if(logEl.children.length>8) logEl.lastChild.remove();
+  }
+
+  document.querySelectorAll('.toggle').forEach(t=>{
+    t.addEventListener('click',()=>{
+      t.classList.toggle('on');
+      const on=t.classList.contains('on');
+      if(t.id==='autoSync'){ addLog(on?'auto-sync ENABLED':'auto-sync paused', on?'ok':'err'); toast(on?'Auto-sync ON':'Auto-sync OFF'); }
+      if(t.id==='dailySwitch'){ addLog('daily backup '+(on?'enabled':'disabled')); toast('Daily backup '+(on?'enabled':'disabled')); }
+    });
+  });
+
+  $('backupTime').addEventListener('change', e=>{ addLog('daily schedule set → '+e.target.value); toast('Backup time → '+e.target.value); });
+
+  $('btnBackup').addEventListener('click', ()=>{
+    meterFill.style.width='0%'; meterLabel.textContent='committing…'; $('btnBackup').disabled=true;
+    const steps=['20%','45%','70%','90%','100%']; let i=0;
+    const iv=setInterval(()=>{
+      meterFill.style.width=steps[i++];
+      if(i>=steps.length){
+        clearInterval(iv);
+        meterLabel.textContent='done · pushed to Twarga/Obsidian_V';
+        $('btnBackup').disabled=false;
+        addLog('BACKUP+PUSH ok → Twarga/Obsidian_V','ok');
+        toast('✔ Backed up & pushed!');
+      }
+    },250);
+  });
+
+  $('btnPull').addEventListener('click', ()=>{ addLog('pull from origin → up to date'); toast('Pull ok'); });
+  $('btnCommit').addEventListener('click', ()=>{ addLog('commit staged changes made'); toast('Committed'); });
+  $('btnStatus').addEventListener('click', ()=>{ addLog('status check → clean working tree'); toast('All synced ✓'); });
+
+  window.addEventListener('load', ()=> setTimeout(()=>toast('mockup v2 — readable pixel UI, all controls work!'),600));
+</script>
+</body>
+</html>

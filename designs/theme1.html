@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixelboard — Theme 1: NEON GRID</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#150a2e; --panel:#1d1244; --panel2:#2a1a5e; --panel3:#3a2a7d;
+  --border:#21f3d9; --accent:#ff4fd8; --accent2:#21d0ff;
+  --orange:#ff9e2c; --text:#f6f2ff; --muted:#b9aee6;
+  --good:#21f371; --bad:#ff5c7a; --warn:#ffc93c;
+}
+body{font-family:'VT323',monospace;background:var(--bg);
+  background-image:linear-gradient(rgba(255,79,195,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,.06) 1px,transparent 1px),radial-gradient(circle at 90% 10%,#ff4fd366 0%,transparent 40%),radial-gradient(circle at 10% 90%,#00f3ff55 0%,transparent 40%),#150a2e;
+  background-size:34px 34px,34px 34px,100% 100%,100% 100%,100% 100%;
+  color:var(--text);min-height:100vh;padding:30px 12px 50px;display:flex;flex-direction:column;align-items:center}
+.window{width:680px;max-width:98%;background:var(--panel);border:3px solid var(--border);box-shadow:8px 8px 0 #00000066,0 0 22px #ff4fd455}
+.titlebar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--panel2);border-bottom:3px solid var(--border)}
+.titlebar .hud{font-family:'Press Start 2P',monospace;font-size:11px;color:var(--accent)}
+.titlebar .icons span{color:var(--muted);margin-left:9px}.titlebar .icons .x{color:var(--bad)}
+.body{padding:18px 22px 22px}
+.banner{display:flex;align-items:center;gap:14px;background:var(--panel3);border:2px solid var(--border);padding:12px 16px;margin-bottom:18px;box-shadow:inset 0 0 18px #00000044}
+.dot{width:13px;height:13px;background:var(--green);border:2px solid #eafff2;animation:blink 1.4s steps(2) infinite;flex:none}
+@keyframes blink{50%{opacity:.25}}
+.stat-t{font-size:22px;color:var(--green);text-shadow:0 0 8px var(--green)}.stat-s{font-size:16px;color:var(--muted);margin-top:2px}
+.card{margin-bottom:18px}.card-h{font-family:'Press Start 2P',monospace;font-size:9px;color:var(--accent2);letter-spacing:1px;padding:4px 2px 8px;border-bottom:2px dashed var(--panel3);margin-bottom:12px}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:18px}
+.st{background:var(--panel2);border:2px solid var(--border);padding:12px;text-align:center}.st .n{font-size:25px;color:var(--accent)}.st .c{font-size:14px;color:var(--muted)}
+.repo{background:#140a30;border:2px solid var(--panel3);padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.repo .rname{font-size:20px;color:var(--text)}.repo .rpath{font-size:14px;color:var(--muted)}
+.repo .tag{font-family:'Press Start 2P',monospace;font-size:8px;color:var(--accent2);border:1px solid var(--accent2);padding:4px 6px}
+.chip{font-size:16px;color:var(--muted)}
+.btn{font-family:'VT323',monospace;font-size:20px;background:var(--panel2);color:var(--text);border:2px solid var(--border);padding:7px 13px;cursor:pointer;box-shadow:0 3px 0 #00000088;transition:transform .05s}
+.btn:hover{background:var(--panel3)}.btn:active{transform:translateY(2px)}
+.btn.pri{background:#0f8b5f;border-color:var(--green);color:#eafff2}.btn.add{background:#7a2fa0;border-color:var(--accent)}
+.btnbar{display:flex;gap:10px;margin:6px 0 12px}.btnbar .btn{flex:1}
+.meter{width:100%;height:20px;background:#0b0520;border:2px solid var(--border);margin:8px 0 4px}.meter .f{height:100%;width:0%;background:repeating-linear-gradient(90deg,var(--accent) 0 8px,#7a2fa0 8px 10px);transition:width .4s steps(10)}
+.log{background:#0b0520;border:2px solid var(--border);padding:10px 14px;height:140px;overflow-y:auto;font-size:18px;line-height:1.6;color:var(--muted)}
+.log .ok{color:var(--green)}.log .er{color:var(--bad)}.log .wa{color:var(--warn)}.log .ts{color:#5850a0}
+.foot{display:flex;justify-content:space-between;font-size:17px;color:var(--muted);border-top:2px dashed var(--panel3);margin-top:12px;padding-top:12px;flex-wrap:wrap;gap:8px}
+hr.px{border:none;border-top:2px solid var(--panel3);margin:14px 0}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:#000;border:2px solid var(--border);color:var(--text);padding:12px 20px;font-size:19px;display:none;z-index:60;box-shadow:4px 4px 0 var(--accent)}
+.settings{display:none;background:#140a30;border:2px solid var(--accent);padding:16px;margin-bottom:18px}
+.settings.open{display:block}
+.set{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;font-size:20px}
+.themes{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.th{width:70px;height:52px;border:3px solid var(--muted);cursor:pointer;padding:0}
+.tray{margin-top:20px;display:flex;align-items:center;gap:12px;font-size:19px;color:var(--muted);background:var(--panel2);border:2px solid var(--panel3);padding:12px 16px}
+.trayi{width:26px;height:26px;background:var(--green);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;color:#000;flex:none}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<div class="window">
+ <div class="titlebar"><div class="hud">▓ NEON GRID</div><div class="icons"><span>▮</span><span>▢</span><span class="x">✕</span></div></div>
+ <div class="body">
+  <div class="banner"><div class="dot"></div><div><div class="stat-t">RUNNING · 2 WORKERS</div><div class="stat-s">Master vault: Twarga-System · TWARGA › obsidian</div></div></div>
+
+  <div class="stats">
+    <div class="st"><div class="n">03:41</div><div class="c">LAST BACKUP</div></div>
+    <div class="st"><div class="n">24</div><div class="c">FILES TRACKED</div></div>
+    <div class="st"><div class="n">87</div><div class="c">PUSHES SO FAR</div></div>
+  </div>
+
+  <div class="card"><div class="card-h">◈ WORKERS · REPOSITORIES</div>
+    <div class="repo"><div><div class="r">Twarga-System</div><div class="rpath">/home/twarga/Documents/Twarga-System</div></div><div class="tag">18:00</div><span class="chip">✓ synced</span></div>
+    <div class="repo"><div><div class="r">Obsidian_V</div><div class="rpath">/home/twarga/Notes/Obsidian_V</div></div><div class="tag" style="color:var(--warn);border-color:var(--warn)">OFF</div><span class="chip">paused</span></div>
+    <div class="btnbar" style="margin-top:10px"><button class="btn add" id="addRepo">＋ ADD REPO…</button></div>
+  </div>
+
+  <div class="card"><div class="card-h">◈ ACTION — ALL WORKERS</div>
+    <div class="btnbar"><button class="btn pri" id="btnBackup">BACKUP + PUSH ALL</button></div>
+    <div class="btnbar"><button class="btn" id="btnPull">PULL</button><button class="btn" id="btnCommit">STAGE</button><button class="btn" id="btnOpen">OPEN SETTINGS</button></div>
+  </div>
+
+  <div class="card"><div class="card-h">▮ LAST SYNC RUN</div>
+    <div class="meter"><div class="f" id="meterFill"></div></div>
+    <div class="foot" style="border:none;padding-top:4px;margin-top:4px"><span id="meterLabel">idle</span><span style="color:var(--green)">✓ all synced</span></div>
+  </div>
+
+  <hr class="px">
+
+  <div class="card"><div class="card-h">▨ SETTINGS</div>
+    <div class="row"><span>Theme</span>
+      <div class="themes">
+        <button class="th" onclick="pick(0)" style="background:#150a2e;border-color:#ff4ec3"></button>
+        <button class="th" onclick="pick(1)" style="background:#050b05;border-color:#33ff66"></button>
+        <button class="th" onclick="pick(2)" style="background:#bfc8c8;border-color:#6ba"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-h">▨ ACTIVITY LOG</div>
+    <div class="log" id="log">
+      <div><span class="ts">[18:00]</span> <span class="ok">worker[Twarga-System] push ok</span></div>
+      <div><span class="ts">[18:00]</span> <span class="ok">worker[Library] push ok</span></div>
+      <div><span class="ts">[17:45]</span> autosync · no changes</div>
+    </div>
+  </div>
+
+  <div class="foot"><span>◉ 24/7 · 2 workers</span><span style="color:var(--accent)">twarga › obsidian</span><span>v1.0.0 / t1</span></div>
+ </div>
+</div>
+
+<div class="tray"><div class="tray-ico">◈</div><span>SYSTEM TRAY — click to open window. Multi-worker app runs 24/7.</span></div>
+
+<script>
+const $=id=>document.getElementById(id);const toastEl=$('toast'),logEl=$('log'),mf=$('meterFill'),ml=$('meterLabel');
+function toast(m){toastEl.style.display='block';toastEl.textContent=m;setTimeout(()=>toastEl.style.display='none',2000);}
+function ts(){const t=new Date();return String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');}
+function addLog(t,c){const d=document.createElement('div');d.innerHTML='<span class="ts">['+ts()+']</span> '+(c?'<span class="'+c+'">'+t+'</span>':t);logEl.prepend(d);if(logEl.children.length>8)logEl.lastChild.remove();}
+$('addRepo').addEventListener('click',()=>{toast('🗂 file-picker open (simulated) — chose a repo folder');addLog('repo folder selected via file manager','ok');});
+$('btnBackup').addEventListener('click',()=>{mf.style.width='0%';ml.textContent='pushing 2 workers…';const s=['20%','45%','70%','90%','100%'];let i=0;const iv=setInterval(()=>{mf.style.width=s[i++];if(i>=s.length){clearInterval(iv);ml.textContent='pushed 2 repos ✓';addLog('pushed all workers → ok','ok');toast('✔ All repos backed up!');}},250);});
+$('btnPull').addEventListener('click',()=>{addLog('pull 2 repos → up-to-date');toast('Pull ok');});
+$('btnCommit').addEventListener('click',()=>{addLog('status check → 1 dirty file');toast('Check done');});
+$('btnOpen').addEventListener('click',()=>{toast('settings panel shown');addLog('opened settings');});
+function open(n){toast('theme switched');}
+window.addEventListener('load',()=>setTimeout(()=>toast('Theme 1 · NEON GRID'),600));
+</script>
+</body>
+</html>

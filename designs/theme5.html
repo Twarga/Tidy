@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixelboard — Theme 5: PAPER DESK</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --paper:#f6f1e3; --paper2:#fffdf5; --paper3:#ebe2cc; --ink:#3a342a; --muted:#8a7f6b;
+  --red:#c1440e; --border:#5a4a36; --green:#4a7b3a; --amber:#c98a2b; --blue:#47597e;
+}
+body{font-family:'VT323',monospace;background:#efe7d4;background-image:radial-gradient(#d8cdb4 1px,transparent 1px);background-size:20px 20px;min-height:100vh;padding:30px 12px 50px;display:flex;flex-direction:column;align-items:center;color:var(--ink)}
+.window{width:680px;max-width:98%;background:var(--paper);border:3px solid var(--ink);box-shadow:6px 6px 0 #00000033;position:relative}
+.window::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:0;height:0;border:9px solid transparent;border-top:11px solid var(--gold);opacity:.3;pointer-events:none}
+.titlebar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:var(--ink);color:var(--paper)}
+.titlebar .hud{font-family:'Press Start 2P',monospace;font-size:10px;color:var(--gold);letter-spacing:1px}.titlebar .icons span{color:#b8a98c;margin-left:10px}
+.body{padding:18px 22px 22px}
+.banner{border:2px solid var(--ink);background:var(--paper2);padding:12px 16px;margin-bottom:16px;display:flex;gap:12px;align-items:center}
+.dot{width:13px;height:13px;background:var(--green);border:2px solid var(--ink);animation:blink 1.4s steps(2) infinite}
+@keyframes blink{50%{opacity:.3}}
+.stat-t{font-size:21px;color:var(--green)}.stat-s{font-size:15px;color:var(--muted)}
+.card{margin-bottom:16px}.card-h{font-family:'Press Start 2P',monospace;font-size:9px;color:var(--red);letter-spacing:1px;border-bottom:2px solid var(--paper3);padding:2px 0 8px;margin-bottom:12px}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px}
+.st{border:2px solid var(--ink);background:var(--paper2);padding:12px;text-align:center}.st .n{font-size:24px;color:var(--red)}.st .c{font-size:14px;color:var(--muted)}
+.repo{border:2px solid var(--ink);background:var(--paper2);padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.rn{font-size:19px;color:var(--ink)}.rp{font-size:13px;color:var(--muted)}
+.tag{font-family:'Press Start 2P',monospace;font-size:8px;background:var(--blue);color:#fff;padding:4px 7px}
+.btn{font-family:'VT323',monospace;font-size:20px;background:var(--paper2);border:2px solid var(--ink);color:var(--ink);padding:7px 14px;cursor:pointer;box-shadow:0 3px 0 var(--ink)}
+.btn:hover{background:var(--paper3)}.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.btn.pri{background:var(--green);color:#fff}.btn.add{background:var(--red);color:#fff}
+.btnbar{display:flex;gap:10px;margin:6px 0 12px}.btnbar .btn{flex:1}
+.meter{width:100%;height:18px;background:#fff;border:2px solid var(--ink);margin:8px 0 4px}.meter .f{height:100%;width:0%;background:repeating-linear-gradient(90deg,var(--red) 0 8px,#8f2f0a 8px 10px)}
+.log{border:2px solid var(--ink);background:#fff;padding:10px 14px;height:130px;overflow-y:auto;font-size:18px;line-height:1.65;color:var(--muted)}
+.log .ok{color:var(--green)}.log .er{color:var(--red)}.log .wa{color:var(--amber)}.log .ts{color:#b3a98c}
+.row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;font-size:20px}
+.themes{display:flex;gap:10px}.th{width:68px;height:48px;border:3px solid var(--ink);cursor:pointer}
+.select{border:2px solid var(--ink);background:#fff;color:var(--ink);font-family:'VT323',monospace;font-size:17px;padding:6px}
+.foot{display:flex;justify-content:space-between;font-size:16px;color:var(--muted);border-top:2px dashed var(--paper3);margin-top:12px;padding-top:12px;gap:8px;flex-wrap:wrap}
+hr.px{border:none;border-top:2px dashed var(--paper3);margin:12px 0}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:12px 22px;font-size:18px;border-radius:4px;box-shadow:5px 5px 0 #00000044;display:none;z-index:60}
+.tray{margin-top:20px;display:flex;align-items:center;gap:12px;font-size:18px;color:var(--ink);font-weight:600;background:var(--paper2);border:2px solid var(--ink);padding:12px 16px}
+.trayi{width:26px;height:26px;background:var(--red);color:#fff;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;flex:none}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<div class="window">
+ <div class="titlebar"><div class="hud">▓ PAPER DESK</div><div class="icons"><span>▮</span><span>▢</span><span>✕</span></div></div>
+ <div class="body">
+  <div class="banner"><div class="dot"></div><div><div class="stat-t">ORGANIZED · 3 WORKERS</div><div class="stat-s">filing complete · everything archived safely</div></div></div>
+
+  <div class="stats">
+    <div class="st"><div class="n">11/08</div><div class="c">LAST FILED</div></div>
+    <div class="st"><div class="n">3</div><div class="c">WORKERS</div></div>
+    <div class="st"><div class="n">08</div><div class="c">DRAWN COPIES</div></div>
+  </div>
+
+  <div class="card"><div class="card-h">◈ WORKERS</div>
+    <div class="repo"><div><div class="rn">Twarga-System</div><div class="rp">/home/twarga/Documents/Twarga-System</div></div><div class="tag">18:00</div></div>
+    <div class="repo"><div><div class="rn">Blog-drafts</div><div class="rp">/home/twarga/Documents/blog</div></div><div class="tag">12:00</div></div>
+    <div class="repo"><div><div class="rn">Notes</div><div class="rp">/home/twarga/Notes</div></div><div class="tag">08:30</div></div>
+    <div class="btnbar" style="margin-top:8px"><button class="btn add">＋ ADD FOLDER…</button></div>
+  </div>
+
+  <div class="card"><div class="card-h">◈ ACTION</div>
+    <div class="btnbar"><button class="btn pri">BACKUP + PUSH ALL</button></div>
+    <div class="btnbar"><button class="btn">PULL</button><button class="btn">VERIFY</button><button class="btn">SETTINGS</button></div>
+  </div>
+
+  <div class="card"><div class="card-h">▮ ARCHIVE GAUGE</div>
+    <div class="meter"><div class="f" style="width:0%" id="m"></div></div>
+    <div style="font-size:15px;color:var(--muted);margin-top:4px" id="ml">waiting</div>
+  </div>
+
+  <hr class="px">
+
+  <div class="card"><div class="card-h">▨ SETTINGS</div>
+    <div class="row"><span>Theme</span><div class="themes">
+      <button class="th" style="background:#150a2e"></button>
+      <button class="th" style="background:#04070a"></button>
+      <button class="th" style="background:#efe6d4"></button></div></div>
+    <div class="row"><span>Default schedule hour</span><select class="select"><option>08</option><option>12</option><option selected>18</option><option>22</option></select></div>
+    <div class="row"><span>Show tray icon</span><select class="select"><option selected>ON</option><option>OFF</option></select></div>
+  </div>
+
+  <div class="card"><div class="card-h">▨ FILING LOG</div>
+    <div class="log"><div><span class="ts">[18:00]</span> <span class="ok">filed 3 → pushed</span></div><div><span class="ts">[12:00]</span> ok</div></div>
+  </div>
+
+  <div class="foot"><span>◉ neat & reliable 24/7</span><span style="color:var(--red)">twarga</span><span>v1 · t5</span></div>
+ </div>
+</div>
+
+<div class="tray"><div class="trayi">▲</div><span>Paper-desk theme — clean window, sits in tray</span></div>
+</body>
+</html>

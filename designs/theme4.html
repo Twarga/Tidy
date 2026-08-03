@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixelboard — Theme 4: WATERMELON</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ff3d5a; --bg2:#e92a4b; --panel:#ffe9f0; --panel2:#fff4f8; --panel3:#fdc9d6;
+  --border:#ff2d55; --accent:#2b8c3e; --text:#3a1020; --muted:#a04a62;
+  --green:#2fb25a; --seed:#262626; --warn:#ff9f1c;
+}
+body{font-family:'VT323',monospace;background:radial-gradient(circle at 50% 30%,var(--bg) 0%,var(--bg2) 70%,#b31e3a 100%);background-image:radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px);background-size:22px 22px;min-height:100vh;padding:30px 12px 50px;display:flex;flex-direction:column;align-items:center;color:var(--text)}
+.window{width:680px;max-width:98%;background:var(--panel);border:3px solid var(--border);border-radius:18px;box-shadow:0 10px 30px #00000044;position:relative;overflow:hidden}
+.window::before{content:'';position:absolute;left:0;right:0;bottom:0;height:46px;background:repeating-linear-gradient(90deg,var(--green) 0 52px,#1e6d31 52px 76px);border-top:3px solid var(--border)}
+.titlebar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--panel2);border-bottom:3px solid var(--border)}
+.titlebar .hud{font-family:'Press Start 2P',monospace;font-size:11px;color:var(--green)}.titlebar .icons span{color:var(--muted);margin-left:10px}
+.body{padding:18px 22px 26px;position:relative}
+.banner{border:3px solid var(--border);background:var(--panel2);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;gap:12px;align-items:center}
+.dot{width:14px;height:14px;background:var(--green);border:2px solid var(--border);border-radius:4px;animation:blink 1.4s steps(2) infinite}
+@keyframes blink{50%{opacity:.3}}
+.stat-t{font-size:21px;color:var(--green)}.stat-s{font-size:15px;color:var(--muted)}
+.card{margin-bottom:16px}.card-h{font-family:'Press Start 2P',monospace;font-size:9px;color:var(--border);letter-spacing:1px;border-bottom:2px dashed var(--line3);padding:2px 0 8px;margin-bottom:12px}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px}
+.st{background:var(--panel2);border:3px solid var(--border);border-radius:10px;padding:12px;text-align:center}.st .n{font-size:24px;color:var(--green)}.st .c{font-size:14px;color:var(--muted)}
+.repo{background:var(--panel2);border:3px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.rn{font-size:19px;color:var(--text)}.rp{font-size:13px;color:var(--muted)}
+.tag{font-family:'Press Start 2P',monospace;font-size:8px;background:var(--green);color:#fff;padding:4px 7px;border-radius:4px}
+.btn{font-family:'VT323',monospace;font-size:20px;background:var(--panel);border:3px solid var(--border);border-radius:8px;color:var(--text);padding:7px 13px;cursor:pointer;box-shadow:0 3px 0 var(--border)}
+.btn:hover{background:var(--panel2)}.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--border)}
+.btn.pri{background:var(--green);color:#fff;border-color:var(--text)}.btn.add{background:var(--border);color:#fff}
+.btnbar{display:flex;gap:10px;margin:6px 0 12px}.btnbar .btn{flex:1}
+.meter{width:100%;height:20px;background:#fff;border:3px solid var(--border);border-radius:6px;margin:8px 0 4px}.meter .f{height:100%;width:0%;background:repeating-linear-gradient(90deg,var(--green) 0 10px,#1e6d31 10px 12px)}
+.log{background:var(--panel2);border:3px solid var(--border);border-radius:8px;padding:10px 14px;height:130px;overflow-y:auto;font-size:18px;line-height:1.6;color:var(--muted)}
+.log .ok{color:var(--green)}.log .er{color:var(--border)}.log .ts{color:var(--muted)}
+.row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;font-size:20px}
+.themes{display:flex;gap:10px}.th{width:68px;height:48px;border:3px solid var(--border);border-radius:8px;cursor:pointer}
+.select{border:3px solid var(--border);border-radius:6px;background:#fff;color:var(--text);font-family:'VT323',monospace;font-size:17px;padding:6px}
+.foot{display:flex;justify-content:space-between;font-size:16px;color:var(--muted);border-top:2px dashed var(--line3);margin-top:12px;padding-top:12px;gap:8px;flex-wrap:wrap}
+hr.px{border:none;border-top:2px dashed var(--line3);margin:12px 0}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--panel);border:3px solid var(--border);border-radius:8px;color:var(--text);padding:12px 20px;font-size:18px;display:none;z-index:60}
+.tray{margin-top:20px;display:flex;align-items:center;gap:12px;font-size:18px;color:#ffe9f0;font-weight:600;background:#a01a2e;border:2px solid #ff8fae;border-radius:10px;padding:12px 16px}
+.trayi{width:26px;height:26px;background:#fff;color:var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;flex:none}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<div class="window">
+ <div class="titlebar"><div class="hud">★ WATERMELON</div><div class="icons"><span>◉</span><span>▢</span><span>✕</span></div></div>
+ <div class="body">
+  <div class="banner"><div class="dot"></div><div><div class="stat-t">SWEET & SYNCED · 2 WORKERS</div><div class="stat-s">ripe and ready · all repos saved</div></div></div>
+
+  <div class="stats">
+    <div class="st"><div class="n">TODAY</div><div class="c">LAST SAVE</div></div>
+    <div class="st"><div class="n">2</div><div class="c">WORKERS</div></div>
+    <div class="st"><div class="n">09</div><div class="c">SEEDS (pushes)</div></div>
+  </div>
+
+  <div class="card"><div class="card-h">◈ WORKERS</div>
+    <div class="repo"><div><div class="rn">Twarga-System</div><div class="rp">/home/twarga/Documents/Twarga-System</div></div><div class="tag">18:00</div></div>
+    <div class="repo"><div><div class="rn">Recipes.md</div><div class="rp">/home/twarga/Documents/Recipes</div></div><div class="tag">12:30</div></div>
+    <div class="btnbar" style="margin-top:8px"><button class="btn add">＋ ADD REPO…</button></div>
+  </div>
+
+  <div class="card"><div class="card-h">◈ ACTION</div>
+    <div class="btnbar"><button class="btn pri">BACKUP + PUSH ALL</button></div>
+    <div class="btnbar"><button class="btn">PULL</button><button class="btn">STATUS</button><button class="btn">SETTINGS</button></div>
+  </div>
+
+  <div class="card"><div class="card-h">▮ RIPENESS GAUGE</div>
+    <div class="meter"><div class="f" style="width:0%" id="m"></div></div>
+    <div style="font-size:15px;color:var(--muted);margin-top:4px" id="ml">idle</div>
+  </div>
+
+  <hr class="px">
+
+  <div class="card"><div class="card-h">▨ SETTINGS</div>
+    <div class="row"><span>Theme</span><div class="themes">
+      <button class="th" style="background:#150a2e;border-color:#ff2d61"></button>
+      <button class="th" style="background:#04070a"></button>
+      <button class="th" style="background:#fff"></button></div></div>
+    <div class="row"><span>Backup frequency</span><select class="select"><option selected>DAILY</option><option>HOURLY</option><option>MANUAL</option></select></div>
+    <div class="row"><span>Show tray badge</span><select class="select"><option selected>ON</option><option>OFF</option></select></div>
+  </div>
+
+  <div class="card"><div class="card-h">▨ SAVE LOG</div>
+    <div class="log"><div><span class="ts">[18:00]</span> <span class="ok">saved 2 repos · push ok</span></div><div><span class="ts">[12:30]</span> saved · clean</div></div>
+  </div>
+
+  <div class="foot"><span>◉ fresh 24/7</span><span style="color:var(--green)">twarga</span><span>v1 · t4</span></div>
+ </div>
+</div>
+
+<div class="tray"><div class="trayi">◉</div><span>Watermelon-themed window — cool fresh, in tray 24/7</span></div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixelboard — Theme 3: GAME BOY</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --shell1:#cfd8d5; --shell2:#aebcba; --shell3:#8fa19f;
+  --scr:#9bbc0f; --scrL:#c2e800; --scrD:#5d7a1f; --scrBlack:#1f3a12;
+  --text:#1f3a12; --accent:#0f380f; --border:#8fae1f;
+  --red:#d24f58; --green:#6ba817;
+}
+body{font-family:'VT323',monospace;background:#e9eeec;background-image:radial-gradient(circle at 10% 20%,#ffffff88 0%,transparent 40%);min-height:100vh;padding:30px 12px 50px;display:flex;flex-direction:column;align-items:center;color:#334;font-weight:600}
+.window{width:660px;max-width:98%;background:var(--shell1);border:4px solid var(--accent);border-radius:14px;box-shadow:0 6px 0 #00000044,0 14px 28px #00000033;overflow:hidden}
+.titlebar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:linear-gradient(var(--shell2),var(--shell3));border-bottom:3px solid var(--accent);border-radius:12px 12px 0 0}
+.titlebar .hud{font-family:'Press Start 2P',monospace;font-size:11px;color:var(--red)}
+.titlebar .icons span{color:#5a6a68;margin-left:10px}.icons span.x{color:var(--red)}
+.body{padding:18px 20px 22px}
+.screen{background:var(--scr);border:6px solid var(--accent);border-radius:6px;padding:16px;box-shadow:inset 0 0 0 2px var(--scrBlack)}
+.banner{display:flex;gap:12px;align-items:center;border:3px solid var(--accent);background:var(--scrD);padding:10px 12px;margin-bottom:14px}
+.dot{width:13px;height:13px;background:var(--scrBlack);border-radius:50%;animation:blink 1.3s steps(2) infinite}
+@keyframes blink{50%{opacity:.3}}
+.stat-t{font-size:21px;color:var(--text);font-weight:700}.stat-s{font-size:15px;color:var(--scrBlack);opacity:.85}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.st{border:3px solid var(--accent);background:var(--scrD);padding:10px;text-align:center}.st .n{font-size:23px;color:var(--text);font-weight:700}.st .c{font-size:14px;color:var(--scrD)}
+.card{margin-bottom:16px}.card-h{font-family:'Press Start 2P',monospace;font-size:9px;color:var(--text);border-bottom:2px dashed var(--accent);padding:2px 0 7px;margin-bottom:10px}
+.repo{border:3px solid var(--accent);background:var(--scrD);padding:10px 12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.rn{font-size:19px;color:var(--text);font-weight:700}.rp{font-size:14px;color:var(--scrD)}
+.tag{font-family:'Press Start 2P',monospace;font-size:8px;color:var(--text);border:2px solid var(--accent);padding:3px 6px;background:var(--scr)}
+.btn{font-family:'VT323',monospace;font-size:19px;background:var(--scrD);border:3px solid var(--accent);color:var(--text);font-weight:700;padding:6px 12px;cursor:pointer;border-radius:4px;box-shadow:0 3px 0 var(--scrD)}
+.btn:hover{background:var(--scr)}.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--scrD)}
+.btn.pri{background:var(--accent);color:#fff}.btn.add{background:var(--red);color:#fff}
+.btnbar{display:flex;gap:10px;margin:6px 0 12px}.btnbar .btn{flex:1}
+.meter{width:100%;height:18px;border:3px solid var(--accent);background:var(--scrD);margin:8px 0 4px}.meter .f{height:100%;width:0%;background:var(--accent)}
+.log{border:3px solid var(--accent);background:var(--scrD);padding:10px 12px;height:140px;overflow-y:auto;font-size:18px;line-height:1.6;color:var(--text)}
+.log .ok{color:var(--scrBlack);font-weight:700}.log .er{color:#7a1212}.log .ts{color:var(--scrD);opacity:.7}
+.row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:19px;gap:10px;flex-wrap:wrap;color:var(--text);font-weight:700}
+.themes{display:flex;gap:10px}.th{width:68px;height:48px;border:3px solid var(--accent);cursor:pointer;border-radius:4px}
+.select{border:3px solid var(--accent);background:var(--scrD);color:var(--text);font-family:'VT323',monospace;font-size:17px;font-weight:700;padding:6px}
+.foot{display:flex;justify-content:space-between;border-top:2px dashed var(--accent);margin-top:10px;padding-top:10px;font-size:16px;color:var(--scrD);font-weight:700}
+hr.px{border:none;border-top:2px dashed var(--accent);margin:12px 0}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:12px 20px;font-size:18px;display:none;z-index:60;border-radius:6px;box-shadow:0 4px 0 #00000044}
+.tray{margin-top:20px;display:flex;align-items:center;gap:12px;font-size:18px;color:#566;font-weight:700;background:var(--shell2);border:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+.trayi{width:26px;height:26px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;flex:none}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<div class="window">
+ <div class="titlebar"><div class="hud">╔ GAMEBOY ╗</div><div class="icons"><span>◆</span><span>▢</span><span class="x">✕</span></div></div>
+ <div class="body">
+  <div class="screen">
+   <div class="banner"><div class="dot"></div><div><div class="stat-t">READY · 4 WORKERS</div><div class="stat-s">save file loaded · all repos tracked</div></div></div>
+
+   <div class="stats">
+     <div class="st"><div class="n">Ok</div><div class="c">STATUS</div></div>
+     <div class="st"><div class="n">4</div><div class="c">WORKERS</div></div>
+     <div class="st"><div class="n">56</div><div class="c">SAVES</div></div>
+   </div>
+
+   <div class="card"><div class="card-h">◈ WORKERS</div>
+     <div class="repo"><div><div class="rn">Twarga-System</div><div class="rp">/home/twarga/Documents/Twarga-System</div></div><div class="tag">18:00</div></div>
+     <div class="repo"><div><div class="rn">Project-Nova</div><div class="rp">/home/twarga/code/nova</div></div><div class="tag">AUTO</div></div>
+     <div class="btnbar" style="margin-top:8px"><button class="btn add">＋ NEW SAVE…</button></div>
+   </div>
+
+   <div class="card"><div class="card-h">◈ ACTION</div>
+     <div class="btnbar"><button class="btn pri">SAVE ALL + PUSH</button></div>
+     <div class="btnbar"><button class="btn">LOAD</button><button class="btn">CHECK</button><button class="btn">SETTINGS</button></div>
+   </div>
+
+   <div class="card"><div class="card-h">▮ SAVE SLOT</div>
+     <div class="meter"><div class="f" style="width:0%" id="m"></div></div>
+     <div style="font-size:15px;color:var(--scrD);font-family:mont PT Fild,monospace;margin-top:4px" id="ml">— insert coin —</div>
+   </div>
+
+   <hr class="px">
+
+   <div class="card"><div class="card-h">▨ SETTINGS</div>
+     <div class="row"><span>Theme</span><div class="themes">
+       <button class="th" style="background:#150a2e"></button>
+       <button class="th" style="background:#04070a"></button>
+       <button class="th" style="background:#9bbc0f"></button></div></div>
+     <div class="row"><span>Save sound</span><select class="select"><option selected>ON</option><option>OFF</option></select></div>
+     <div class="row"><span>Auto-save</span><select class="select"><option>ON</option><option selected>ON · prompt</option><option>OFF</option></select></div>
+   </div>
+
+   <div class="card"><div class="card-h">▨ SAVE LOG</div>
+     <div class="log"><div><span class="ts">[18:00]</span> <span class="ok">★ save slot filled · pushed</span></div><div><span class="ts">[14:00]</span> auto-save ok</div></div>
+   </div>
+
+   <div class="foot"><span>◉ handheld mode 24/7</span><span style="color:var(--red)">twarga</span><span>v1 · t3</span></div>
+  </div>
+ </div>
+</div>
+
+<div class="tray"><div class="trayi">◉</div><span>Handheld-style window — retro green screen, lives in tray</span></div>
+</body>
+</html>

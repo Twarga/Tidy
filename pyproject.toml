@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tidy"
+version = "0.1.0"
+description = "Pixel-styled backup & sync for any folder — desktop GUI, headless CLI/TUI, and MCP for AI agents."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Twarga", email = "twarga.touzani.05@gmail.com" }]
+keywords = ["backup", "sync", "git", "mcp", "cli", "tui", "scheduler", "automation", "desktop"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: POSIX :: Linux",
+  "Topic :: System :: Archiving :: Backup",
+  "Topic :: Software Development :: Version Control :: Git",
+]
+
+[project.urls]
+Homepage = "https://github.com/Twarga/Tidy"
+Repository = "https://github.com/Twarga/Tidy"
+
+[project.optional-dependencies]
+gui = ["pywebview>=5", "pillow"]
+mcp = ["fastmcp>=2"]
+tui = ["rich>=13", "textual>=0.80"]
+scheduler = ["apscheduler>=3.10"]
+dev = ["pytest>=8", "ruff>=0.6", "build>=1.2"]
+
+[project.scripts]
+tidy = "tidy.cli:main"
+tidy-gui = "tidy.gui:main"
+tidy-mcp = "tidy.mcp:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
